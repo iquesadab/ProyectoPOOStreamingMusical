@@ -1,21 +1,21 @@
 import java.time.LocalDate;
 
-public class album {
+public class Album {
 
     private String nombre;
     private LocalDate fechaLanzamiento;
     private String caratula;
-    private cancion[] canciones;
+    private Cancion[] canciones;
 
     private int cantidadCanciones;
 
 
     //metodo constructor
-    public album(String nombre, LocalDate fechaLanzamiento, String caratula, byte cantidadMaximaCanciones) {
+    public Album(String nombre, LocalDate fechaLanzamiento, String caratula, byte cantidadMaximaCanciones) {
         this.nombre = nombre;
         this.fechaLanzamiento = fechaLanzamiento;
         this.caratula = caratula;
-        this.canciones = new cancion[cantidadMaximaCanciones];
+        this.canciones = new Cancion[cantidadMaximaCanciones];
         this.cantidadCanciones = 0;
     }
 
@@ -33,7 +33,7 @@ public class album {
         return caratula;
     }
 
-    public cancion[] getCanciones() {
+    public Cancion[] getCanciones() {
         return canciones;
     }
 
@@ -52,7 +52,7 @@ public class album {
         this.caratula = caratula;
     }
 
-    public void agregarCancion(cancion cancion) {
+    public void agregarCancion(Cancion cancion) {
         if (cancion == null) {
             System.out.println("La canción no existe.");
             return;

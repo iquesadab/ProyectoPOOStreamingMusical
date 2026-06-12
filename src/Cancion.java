@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class cancion {
+public class Cancion {
 
     private String nombre;
     private String genero;
@@ -9,13 +9,13 @@ public class cancion {
     private float calificacion;
     private String artista;
     private String compositor;
-    private album album;
+    private Album album;
 
 
     //metodo constructor
-    public cancion(String nombre, String genero, LocalDate fechaLanzamiento,
+    public Cancion(String nombre, String genero, LocalDate fechaLanzamiento,
                    float precio, float calificacion, String artista,
-                   String compositor, album album) {
+                   String compositor, Album album) {
         this.nombre = nombre;
         this.genero = genero;
         this.fechaLanzamiento = fechaLanzamiento;
@@ -55,7 +55,7 @@ public class cancion {
         return compositor;
     }
 
-    public album getAlbum() {
+    public Album getAlbum() {
         return album;
     }
 
@@ -90,7 +90,7 @@ public class cancion {
         this.compositor = compositor;
     }
 
-    public void setAlbum(album album) {
+    public void setAlbum(Album album) {
         this.album = album;
     }
 
