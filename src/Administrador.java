@@ -6,13 +6,13 @@ public class Administrador {
     private ColaReproduccion colaReproduccion;
 
     // Constructor
-    public Administrador(String correoElectronico, String nombreUsuario, String contrasenia, byte cantidadCancionesCola) {
+    public Administrador(String correoElectronico, String nombreUsuario, String contrasenia, byte cantidadMaximaCanciones) {
         this.correoElectronico = correoElectronico;
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
 
         // Composición
-        colaReproduccion = new ColaReproduccion(cantidadCancionesCola);
+        colaReproduccion = new ColaReproduccion(cantidadMaximaCanciones);
     }
 
     // Getters

@@ -73,7 +73,7 @@ public class Album {
         String texto = "";
 
         for (int i = 0; i < cantidadCanciones; i++) {
-            texto = texto + canciones[i].getnombre();
+            texto = texto + canciones[i].getNombre();
 
             if (i < cantidadCanciones - 1) {
                 texto = texto + ", ";

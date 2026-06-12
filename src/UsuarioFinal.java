@@ -9,7 +9,7 @@ public class UsuarioFinal {
     private String avatar;
     private String correoElectronico;
     private String nombreUsuario;
-    private String contrasena;
+    private String contrasenia;
     private float saldo;
 
     private Cancion[] cancionesCompradas;
@@ -21,7 +21,7 @@ public class UsuarioFinal {
 
     public UsuarioFinal(String nombreCompleto, LocalDate fechaNacimiento, String nacionalidad,
                         String cedula, String avatar, String correoElectronico,
-                        String nombreUsuario, String contrasena, float saldo,
+                        String nombreUsuario, String contrasenia, float saldo,
                         byte cantidadMaximaCanciones, byte cantidadMaximaListas) {
 
         this.nombreCompleto = nombreCompleto;
@@ -31,7 +31,7 @@ public class UsuarioFinal {
         this.avatar = avatar;
         this.correoElectronico = correoElectronico;
         this.nombreUsuario = nombreUsuario;
-        this.contrasena = contrasena;
+        this.contrasenia = contrasenia;
         this.saldo = saldo;
 
         this.cancionesCompradas = new Cancion[cantidadMaximaCanciones];
@@ -70,8 +70,8 @@ public class UsuarioFinal {
         return nombreUsuario;
     }
 
-    public String getContrasena() {
-        return contrasena;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
     public float getSaldo() {
@@ -118,8 +118,8 @@ public class UsuarioFinal {
         this.nombreUsuario = nombreUsuario;
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public void setSaldo(float saldo) {
