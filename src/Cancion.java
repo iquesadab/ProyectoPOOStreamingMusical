@@ -9,13 +9,14 @@ public class Cancion {
     private float calificacion;
     private String artista;
     private String compositor;
-    private Album album;
+    private String nombreAlbum;
+    private String caratulaAlbum;
 
 
     //metodo constructor
     public Cancion(String nombre, String genero, LocalDate fechaLanzamiento,
                    float precio, float calificacion, String artista,
-                   String compositor, Album album) {
+                   String compositor, String nombreAlbum, String caratulaAlbum) {
         this.nombre = nombre;
         this.genero = genero;
         this.fechaLanzamiento = fechaLanzamiento;
@@ -23,7 +24,20 @@ public class Cancion {
         this.calificacion = calificacion;
         this.artista = artista;
         this.compositor = compositor;
-        this.album = album;
+
+        // Si la canción no pertenece a un álbum, se asignan valores predeterminados.
+        if (nombreAlbum == null || nombreAlbum.trim().isEmpty()) {
+            this.nombreAlbum = "Sin álbum";
+        } else {
+            this.nombreAlbum = nombreAlbum;
+        }
+
+        // // Si la canción no pertenece a un álbum o no tiene carátula, se asigna una imagen predeterminada.
+        if (caratulaAlbum == null || caratulaAlbum.trim().isEmpty()) {
+            this.caratulaAlbum = "default.jpg";
+        } else {
+            this.caratulaAlbum = caratulaAlbum;
+        }
     }
 
     //getters
@@ -55,9 +69,9 @@ public class Cancion {
         return compositor;
     }
 
-    public Album getAlbum() {
-        return album;
-    }
+    public String getNombreAlbum() { return nombreAlbum; }
+
+    public String getCaratulaAlbum() { return caratulaAlbum; }
 
 
 
@@ -90,13 +104,14 @@ public class Cancion {
         this.compositor = compositor;
     }
 
-    public void setAlbum(Album album) {
-        this.album = album;
-    }
+    public void setNombreAlbum(String nombreAlbum) { this.nombreAlbum = nombreAlbum; }
+
+    public void setCaratulaAlbum(String caratulaAlbum) { this.caratulaAlbum = caratulaAlbum; }
 
     public void reproducir() {
         System.out.println("Reproduciendo: " + nombre + " - " + artista);
     }
+
     //metodo tostring
     public String toString() {
         return "Canción: " + nombre +
@@ -106,7 +121,8 @@ public class Cancion {
                 "\nFecha de lanzamiento: " + fechaLanzamiento +
                 "\nPrecio: " + precio +
                 "\nCalificación: " + calificacion +
-                "\nAlbum: " + (album != null ? album.getNombre() : "Sin album");
+                "\nÁlbum: " + nombreAlbum +
+                "\nCarátula: " + caratulaAlbum;
     }
 
 }
