@@ -1,15 +1,15 @@
 import java.time.LocalDate;
+import java.time.Period;
 
-public class UsuarioFinal {
+public class UsuarioFinal extends Usuario {
+
+    private static final float BONO_INICIAL = 4.99f;
 
     private String nombreCompleto;
     private LocalDate fechaNacimiento;
     private String nacionalidad;
     private String cedula;
     private String avatar;
-    private String correoElectronico;
-    private String nombreUsuario;
-    private String contrasenia;
     private float saldo;
 
     private Cancion[] cancionesCompradas;
@@ -19,20 +19,21 @@ public class UsuarioFinal {
     private int cantidadCancionesCompradas;
     private int cantidadListasReproduccion;
 
+    // Constructor
     public UsuarioFinal(String nombreCompleto, LocalDate fechaNacimiento, String nacionalidad,
                         String cedula, String avatar, String correoElectronico,
-                        String nombreUsuario, String contrasenia, float saldo,
+                        String nombreUsuario, String contrasenia,
                         byte cantidadMaximaCanciones, byte cantidadMaximaListas) {
+
+        // Se llama al constructor de Usuario
+        super(correoElectronico, nombreUsuario, contrasenia);
 
         this.nombreCompleto = nombreCompleto;
         this.fechaNacimiento = fechaNacimiento;
         this.nacionalidad = nacionalidad;
         this.cedula = cedula;
         this.avatar = avatar;
-        this.correoElectronico = correoElectronico;
-        this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
-        this.saldo = saldo;
+        this.saldo = BONO_INICIAL;
 
         this.cancionesCompradas = new Cancion[cantidadMaximaCanciones];
         this.listasReproduccion = new ListaReproduccion[cantidadMaximaListas];
@@ -42,90 +43,85 @@ public class UsuarioFinal {
         this.cantidadListasReproduccion = 0;
     }
 
-    public String getNombreCompleto() {
-        return nombreCompleto;
+    // Getters y Setters
+    public String getNombreCompleto()
+    {return nombreCompleto; }
+
+    public LocalDate getFechaNacimiento()
+    { return fechaNacimiento; }
+
+    public String getNacionalidad()
+    { return nacionalidad; }
+
+    public String getCedula()
+    { return cedula; }
+
+    public String getAvatar()
+    { return avatar; }
+
+    public float getSaldo()
+    { return saldo; }
+
+    public Cancion[] getCancionesCompradas()
+    { return cancionesCompradas; }
+
+    public ListaReproduccion[] getListasReproduccion()
+    { return listasReproduccion; }
+
+    public ColaReproduccion getColaReproduccion()
+    { return colaReproduccion; }
+
+
+    public void setNombreCompleto(String nombreCompleto)
+    { this.nombreCompleto = nombreCompleto; }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento)
+    { this.fechaNacimiento = fechaNacimiento; }
+
+    public void setNacionalidad(String nacionalidad)
+    { this.nacionalidad = nacionalidad; }
+
+    public void setCedula(String cedula)
+    { this.cedula = cedula; }
+
+    public void setAvatar(String avatar)
+    { this.avatar = avatar; }
+
+    public void setSaldo(float saldo)
+    { this.saldo = saldo; }
+
+    // Validar mayoría de edad
+    public boolean esMayorDeEdad() {
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears() >= 18;
     }
 
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
+    // Cambio de contraseña usando la validación de la clase padre
+    public boolean cambiarContrasenia(String contraseniaActual, String nuevaContrasenia) {
+        if (!this.contrasenia.equals(contraseniaActual)) {
+            System.out.println("La contraseña actual es incorrecta.");
+            return false;
+        }
+
+        if (!Usuario.esContraseniaValida(nuevaContrasenia)) {
+            System.out.println("La nueva contraseña no cumple los requisitos:" +
+                    "\n- Mínimo 8 caracteres." +
+                    "\n- Al menos una mayúscula." +
+                    "\n- Al menos un número." +
+                    "\n- Al menos un carácter especial.");
+            return false;
+        }
+
+        if (nuevaContrasenia.equals(contraseniaActual)) {
+            System.out.println("La nueva contraseña no puede ser igual a la actual.");
+            return false;
+        }
+
+        this.contrasenia = nuevaContrasenia;
+        System.out.println("Contraseña actualizada correctamente.");
+        return true;
     }
 
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public String getCedula() {
-        return cedula;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public String getCorreoElectronico() {
-        return correoElectronico;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public String getContrasenia() {
-        return contrasenia;
-    }
-
-    public float getSaldo() {
-        return saldo;
-    }
-
-    public Cancion[] getCancionesCompradas() {
-        return cancionesCompradas;
-    }
-
-    public ListaReproduccion[] getListasReproduccion() {
-        return listasReproduccion;
-    }
-
-    public ColaReproduccion getColaReproduccion() {
-        return colaReproduccion;
-    }
-
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
-    }
-
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public void setCorreoElectronico(String correoElectronico) {
-        this.correoElectronico = correoElectronico;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
-    }
-
-    public void setSaldo(float saldo) {
-        this.saldo = saldo;
-    }
-
+    // Compra y gestión de música
     public void comprarCancion(Cancion cancion) {
         if (cancion == null) {
             System.out.println("La canción no existe.");
@@ -140,9 +136,7 @@ public class UsuarioFinal {
         if (saldo >= cancion.getPrecio()) {
             cancionesCompradas[cantidadCancionesCompradas] = cancion;
             cantidadCancionesCompradas++;
-
             saldo = saldo - cancion.getPrecio();
-
             System.out.println("Canción comprada correctamente.");
         } else {
             System.out.println("Saldo insuficiente para comprar la canción.");
@@ -156,7 +150,6 @@ public class UsuarioFinal {
         }
 
         ListaReproduccion nuevaLista = new ListaReproduccion(nombre, LocalDate.now(), 0, (byte) 10);
-
         listasReproduccion[cantidadListasReproduccion] = nuevaLista;
         cantidadListasReproduccion++;
 
@@ -182,10 +175,10 @@ public class UsuarioFinal {
             System.out.println("La canción no existe.");
             return;
         }
-
         colaReproduccion.agregarCancion(cancion);
     }
 
+    @Override
     public String toString() {
         return "Usuario: " + nombreCompleto +
                 "\nNombre de usuario: " + nombreUsuario +

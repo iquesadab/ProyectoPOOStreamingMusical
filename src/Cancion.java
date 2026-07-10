@@ -1,7 +1,6 @@
 import java.time.LocalDate;
 
 public class Cancion {
-
     private String nombre;
     private String genero;
     private LocalDate fechaLanzamiento;
@@ -12,8 +11,6 @@ public class Cancion {
     private String nombreAlbum;
     private String caratulaAlbum;
 
-
-    //metodo constructor
     public Cancion(String nombre, String genero, LocalDate fechaLanzamiento,
                    float precio, float calificacion, String artista,
                    String compositor, String nombreAlbum, String caratulaAlbum) {
@@ -25,14 +22,12 @@ public class Cancion {
         this.artista = artista;
         this.compositor = compositor;
 
-        // Si la canción no pertenece a un álbum, se asignan valores predeterminados.
         if (nombreAlbum == null || nombreAlbum.trim().isEmpty()) {
             this.nombreAlbum = "Sin álbum";
         } else {
             this.nombreAlbum = nombreAlbum;
         }
 
-        // // Si la canción no pertenece a un álbum o no tiene carátula, se asigna una imagen predeterminada.
         if (caratulaAlbum == null || caratulaAlbum.trim().isEmpty()) {
             this.caratulaAlbum = "default.jpg";
         } else {
@@ -40,79 +35,59 @@ public class Cancion {
         }
     }
 
-    //getters
-    public String getNombre() {
-        return nombre;
-    }
+    // Getters y Setters
+    public String getNombre()
+    { return nombre; }
 
-    public String getGenero() {
-        return genero;
-    }
+    public String getGenero()
+    { return genero; }
 
-    public LocalDate getFechaLanzamiento() {
-        return fechaLanzamiento;
-    }
+    public LocalDate getFechaLanzamiento()
+    { return fechaLanzamiento; }
 
-    public float getPrecio() {
-        return precio;
-    }
+    public float getPrecio()
+    { return precio; }
 
-    public float getCalificacion() {
-        return calificacion;
-    }
+    public float getCalificacion()
+    { return calificacion; }
 
-    public String getArtista() {
-        return artista;
-    }
+    public String getArtista()
+    { return artista; }
 
-    public String getCompositor() {
-        return compositor;
-    }
+    public String getCompositor()
+    { return compositor; }
 
-    public String getNombreAlbum() { return nombreAlbum; }
+    public String getNombreAlbum()
+    { return nombreAlbum; }
 
-    public String getCaratulaAlbum() { return caratulaAlbum; }
+    public String getCaratulaAlbum()
+    { return caratulaAlbum; }
 
+    public void setNombre(String nombre)
+    { this.nombre = nombre; }
 
+    public void setGenero(String genero)
+    { this.genero = genero; }
 
-    //setters
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public void setFechaLanzamiento(LocalDate fechaLanzamiento)
+    { this.fechaLanzamiento = fechaLanzamiento; }
 
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
+    public void setPrecio(float precio)
+    { this.precio = precio; }
 
-    public void setFechaLanzamiento(LocalDate fechaLanzamiento) {
-        this.fechaLanzamiento = fechaLanzamiento;
-    }
+    public void setCalificacion(float calificacion)
+    { this.calificacion = calificacion; }
 
-    public void setPrecio(float precio) {
-        this.precio = precio;
-    }
-
-    public void setCalificacion(float calificacion) {
-        this.calificacion = calificacion;
-    }
-
-    public void setArtista(String artista) {
-        this.artista = artista;
-    }
-
-    public void setCompositor(String compositor) {
-        this.compositor = compositor;
-    }
-
+    public void setArtista(String artista) { this.artista = artista; }
+    public void setCompositor(String compositor) { this.compositor = compositor; }
     public void setNombreAlbum(String nombreAlbum) { this.nombreAlbum = nombreAlbum; }
-
     public void setCaratulaAlbum(String caratulaAlbum) { this.caratulaAlbum = caratulaAlbum; }
 
     public void reproducir() {
         System.out.println("Reproduciendo: " + nombre + " - " + artista);
     }
 
-    //metodo tostring
+    @Override
     public String toString() {
         return "Canción: " + nombre +
                 "\nArtista: " + artista +
@@ -124,5 +99,4 @@ public class Cancion {
                 "\nÁlbum: " + nombreAlbum +
                 "\nCarátula: " + caratulaAlbum;
     }
-
 }

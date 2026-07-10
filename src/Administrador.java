@@ -1,64 +1,24 @@
-public class Administrador {
-    // Atributos
-    private String correoElectronico;
-    private String nombreUsuario;
-    private String contrasenia;
+public class Administrador extends Usuario {
     private ColaReproduccion colaReproduccion;
 
     // Constructor
     public Administrador(String correoElectronico, String nombreUsuario, String contrasenia, byte cantidadMaximaCanciones) {
-        this.correoElectronico = correoElectronico;
-        this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
-
-        // Composición
-        colaReproduccion = new ColaReproduccion(cantidadMaximaCanciones);
+        // Invoca al constructor de la clase padre (Usuario)
+        super(correoElectronico, nombreUsuario, contrasenia);
+        this.colaReproduccion = new ColaReproduccion(cantidadMaximaCanciones);
     }
 
-    // Getters
-
-    public String getCorreoElectronico() {
-        return correoElectronico;
-    }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public String getContrasenia() {
-        return contrasenia;
-    }
-
-    public ColaReproduccion getColaReproduccion() {
-        return colaReproduccion;
-    }
-
-    // Setters
-
-    public void setCorreoElectronico(String correoElectronico) {
-        this.correoElectronico = correoElectronico;
-    }
-
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
-    }
-
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
-    }
+    // Getter
+    public ColaReproduccion getColaReproduccion() { return colaReproduccion; }
 
     // Métodos
-
     public void registrarCancion(Cancion cancion) {
-        System.out.println("El administrador " + nombreUsuario +
-                " registró la canción " + cancion.getNombre());
+        System.out.println("El administrador " + nombreUsuario + " registró la canción " + cancion.getNombre());
     }
 
     public void agregarCancionACola(Cancion cancion) {
         colaReproduccion.agregarCancion(cancion);
-
-        System.out.println("La canción " + cancion.getNombre() +
-                " fue agregada a la cola de reproducción.");
+        System.out.println("La canción " + cancion.getNombre() + " fue agregada a la cola de reproducción.");
     }
 
     @Override
