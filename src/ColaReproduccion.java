@@ -1,57 +1,116 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class ColaReproduccion {
-    private Cancion[] canciones;
-    private int cantidadCanciones;
 
-    public ColaReproduccion(byte cantidadMaximaCanciones) {
-        this.canciones = new Cancion[cantidadMaximaCanciones];
-        this.cantidadCanciones = 0;
+    // Atributo que almacena las canciones en el orden en que fueron agregadas.
+    private Queue<Cancion> cola;
+
+    // Constructor
+    public ColaReproduccion() {
+        this.cola = new LinkedList<>();
     }
 
-    public Cancion[] getCanciones() { return canciones; }
+    // Getter
+    public Queue<Cancion> getCola() {
+        return cola;
+    }
 
+    // Método para agregar una canción al final de la cola.
     public void agregarCancion(Cancion cancion) {
+
+        // Verifica que la canción recibida exista.
         if (cancion == null) {
-            System.out.println("La canción no existe.");
+            System.out.println("No se puede agregar una canción vacía a la cola.");
             return;
         }
 
-        if (cantidadCanciones >= canciones.length) {
-            System.out.println("La cola ya está llena.");
-            return;
-        }
+        // Agrega la canción al final de la cola.
+        cola.add(cancion);
 
-        canciones[cantidadCanciones] = cancion;
-        cantidadCanciones++;
-        System.out.println("Canción agregada a la cola correctamente.");
+        System.out.println("Canción agregada a la cola: "
+                + cancion.getNombre());
     }
 
+    // Método para reproducir y eliminar la primera canción de la cola.
+    public void reproducirSiguiente() {
+
+        // Verifica si la cola está vacía.
+        if (cola.isEmpty()) {
+            System.out.println("La cola de reproducción está vacía.");
+            return;
+        }
+
+        // poll() obtiene y elimina la primera canción de la cola.
+        Cancion cancion = cola.poll();
+
+        // El método reproducir también incrementa el contador de reproducciones.
+        cancion.reproducir();
+    }
+
+    // Método para eliminar la primera canción sin reproducirla.
     public void eliminarCancion() {
-        if (cantidadCanciones == 0) {
-            System.out.println("La cola está vacía.");
+
+        // Verifica si la cola está vacía.
+        if (cola.isEmpty()) {
+            System.out.println("La cola de reproducción está vacía.");
             return;
         }
 
-        System.out.println("Se eliminó la canción: " + canciones[0].getNombre());
+        // poll() obtiene y elimina la primera canción.
+        Cancion cancionEliminada = cola.poll();
 
-        for (int i = 0; i < cantidadCanciones - 1; i++) {
-            canciones[i] = canciones[i + 1];
-        }
-
-        canciones[cantidadCanciones - 1] = null;
-        cantidadCanciones--;
+        System.out.println("Se eliminó la canción: "
+                + cancionEliminada.getNombre());
     }
 
-    public String mostrarCanciones() {
-        String texto = "";
-        for (int i = 0; i < cantidadCanciones; i++) {
-            texto = texto + canciones[i].getNombre();
-            if (i < cantidadCanciones - 1) {
-                texto = texto + ", ";
-            }
+    // Método para mostrar todas las canciones de la cola.
+    public void mostrarCola() {
+
+        // Verifica si la cola está vacía.
+        if (cola.isEmpty()) {
+            System.out.println("La cola de reproducción está vacía.");
+            return;
         }
-        return texto;
+
+        System.out.println("\nCola de reproducción:");
+
+        int contador = 1;
+
+        for (Cancion cancion : cola) {
+            System.out.println(contador + ". "
+                    + cancion.getNombre() + " - "
+                    + cancion.getArtista());
+
+            contador++;
+        }
+    }
+
+    // Método para verificar si la cola está vacía.
+    public boolean estaVacia() {
+        return cola.isEmpty();
     }
 
     @Override
-    public String toString() { return mostrarCanciones(); }
+    public String toString() {
+
+        // Si la cola está vacía, devuelve un mensaje.
+        if (cola.isEmpty()) {
+            return "La cola de reproducción está vacía.";
+        }
+
+        String texto = "";
+
+        int contador = 1;
+
+        for (Cancion cancion : cola) {
+            texto = texto + contador + ". "
+                    + cancion.getNombre() + " - "
+                    + cancion.getArtista() + "\n";
+
+            contador++;
+        }
+
+        return texto;
+    }
 }

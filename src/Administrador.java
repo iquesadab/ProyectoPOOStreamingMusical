@@ -2,10 +2,10 @@ public class Administrador extends Usuario {
     private ColaReproduccion colaReproduccion;
 
     // Constructor
-    public Administrador(String correoElectronico, String nombreUsuario, String contrasenia, byte cantidadMaximaCanciones) {
+    public Administrador(String correoElectronico, String nombreUsuario, String contrasenia) {
         // Invoca al constructor de la clase padre (Usuario)
         super(correoElectronico, nombreUsuario, contrasenia);
-        this.colaReproduccion = new ColaReproduccion(cantidadMaximaCanciones);
+        this.colaReproduccion = new ColaReproduccion();
     }
 
     // Getter

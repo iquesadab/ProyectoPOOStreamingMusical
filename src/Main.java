@@ -7,7 +7,7 @@ public class Main {
 
         // ---------- INSTANCIACIONES DE PRUEBA INICIALES ----------
         Administrador administrador = new Administrador("admin@streaming.com",
-                "adminPrincipal", "Admin123!", (byte) 5);
+                "adminPrincipal", "Admin123!");
 
         Cancion cancion1 = new Cancion("Luz de Luna", "Pop",
                 LocalDate.of(2020, 5, 15), 1.99f, 4.8f,

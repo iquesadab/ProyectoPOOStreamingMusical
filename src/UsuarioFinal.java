@@ -37,7 +37,7 @@ public class UsuarioFinal extends Usuario {
 
         this.cancionesCompradas = new Cancion[cantidadMaximaCanciones];
         this.listasReproduccion = new ListaReproduccion[cantidadMaximaListas];
-        this.colaReproduccion = new ColaReproduccion(cantidadMaximaCanciones);
+        this.colaReproduccion = new ColaReproduccion();
 
         this.cantidadCancionesCompradas = 0;
         this.cantidadListasReproduccion = 0;
@@ -149,7 +149,7 @@ public class UsuarioFinal extends Usuario {
             return;
         }
 
-        ListaReproduccion nuevaLista = new ListaReproduccion(nombre, LocalDate.now(), 0, (byte) 10);
+        ListaReproduccion nuevaLista = new ListaReproduccion(nombre, LocalDate.now());
         listasReproduccion[cantidadListasReproduccion] = nuevaLista;
         cantidadListasReproduccion++;
 
