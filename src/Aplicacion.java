@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Aplicacion {
@@ -7,11 +8,29 @@ public class Aplicacion {
     private ArrayList<UsuarioFinal> usuariosFinales;
     private ArrayList<Cancion> catalogoCanciones;
 
+    // Clase encargada de las validaciones y la autenticación
+    private SistemaAutenticacion sistemaAutenticacion;
+
+    // Lista predeterminada de nacionalidades disponibles
+    private ArrayList<String> nacionalidadesPermitidas;
+
     // Constructor
     public Aplicacion() {
-        administrador = null;
-        usuariosFinales = new ArrayList<>();
-        catalogoCanciones = new ArrayList<>();
+        // Al iniciar la aplicación todavía no existe un administrador.
+        this.administrador = null;
+
+        // Se crean las colecciones principales de la aplicación.
+        this.usuariosFinales = new ArrayList<>();
+        this.catalogoCanciones = new ArrayList<>();
+
+        // Se crea el sistema encargado de la autenticación.
+        this.sistemaAutenticacion = new SistemaAutenticacion();
+
+        // Se crea la lista de nacionalidades disponibles.
+        this.nacionalidadesPermitidas = new ArrayList<>();
+
+        // Se agregan las nacionalidades permitidas en la aplicación.
+        cargarNacionalidadesPermitidas();
     }
 
     // Getters
@@ -27,8 +46,26 @@ public class Aplicacion {
         return catalogoCanciones;
     }
 
+    public SistemaAutenticacion getSistemaAutenticacion() { return sistemaAutenticacion; }
+
+    public ArrayList<String> getNacionalidadesPermitidas() { return nacionalidadesPermitidas; }
+
     // Métodos principales
 
+    // Método para cargar las nacionalidades disponibles
+    private void cargarNacionalidadesPermitidas() {
+
+        nacionalidadesPermitidas.add("Costarricense");
+        nacionalidadesPermitidas.add("Panameña");
+        nacionalidadesPermitidas.add("Nicaragüense");
+        nacionalidadesPermitidas.add("Salvadoreña");
+        nacionalidadesPermitidas.add("Guatemalteca");
+        nacionalidadesPermitidas.add("Hondureña");
+        nacionalidadesPermitidas.add("Mexicana");
+        nacionalidadesPermitidas.add("Colombiana");
+    }
+
+    // Método para verificar si ya existe un administrador
     public boolean hayAdministrador() {
         if (administrador != null) {
             return true;
@@ -37,78 +74,211 @@ public class Aplicacion {
         }
     }
 
-    public void registrarAdministrador(Administrador administrador) {
-        if (administrador == null) {
-            System.out.println("No se puede registrar un administrador vacío.");
-            return;
-        }
+    // Método para registrar obligatoriamente al administrador
+    public boolean registrarAdministrador(String correoElectronico, String nombreUsuario, String contrasenia, String confirmarContrasenia) {
 
+        // Verifica que no exista otro administrador registrado.
         if (hayAdministrador()) {
             System.out.println("Ya existe un administrador registrado.");
-            return;
+            return false;
         }
 
-        this.administrador = administrador;
+        // Verifica que el correo tenga un formato válido.
+        if (!Usuario.esCorreoValido(correoElectronico)) {
+            System.out.println(
+                    "El correo electrónico no tiene un formato válido.");
+            return false;
+        }
+
+        // Verifica que el nombre de usuario no esté vacío.
+        if (nombreUsuario == null
+                || nombreUsuario.trim().isEmpty()) {
+
+            System.out.println(
+                    "El nombre de usuario no puede estar vacío.");
+            return false;
+        }
+
+        // Verifica que la contraseña cumpla los requisitos.
+        if (!Usuario.esContraseniaValida(contrasenia)) {
+
+            System.out.println(
+                    "La contraseña no cumple los requisitos:" +
+                            "\n- Debe tener entre 8 y 12 caracteres." +
+                            "\n- Debe incluir al menos una letra mayúscula." +
+                            "\n- Debe incluir al menos una letra minúscula." +
+                            "\n- Debe incluir al menos un número." +
+                            "\n- Debe incluir al menos un carácter especial.");
+
+            return false;
+        }
+
+        // Verifica que ambas contraseñas coincidan.
+        if (!sistemaAutenticacion.confirmarContrasenia(
+                contrasenia, confirmarContrasenia)) {
+
+            System.out.println("Las contraseñas no coinciden.");
+            return false;
+        }
+
+        // Crea el administrador después de completar las validaciones.
+        administrador = new Administrador(
+                correoElectronico,
+                nombreUsuario,
+                contrasenia
+        );
+
         System.out.println("Administrador registrado correctamente.");
+        return true;
     }
 
-    public void registrarUsuarioFinal(UsuarioFinal usuarioFinal) {
-        if (usuarioFinal == null) {
-            System.out.println("No se puede registrar un usuario vacío.");
-            return;
+    // Método para registrar un usuario final
+    public UsuarioFinal registrarUsuarioFinal(
+            String nombreCompleto,
+            LocalDate fechaNacimiento,
+            String nacionalidad,
+            String cedula,
+            String avatar,
+            String correoElectronico,
+            String nombreUsuario,
+            String contrasenia,
+            String confirmarContrasenia,
+            byte cantidadMaximaCanciones,
+            byte cantidadMaximaListas) {
+
+        // SistemaAutenticacion valida, crea y agrega el usuario
+        // al ArrayList principal de la aplicación.
+        return sistemaAutenticacion.registrarUsuario(
+                usuariosFinales,
+                nacionalidadesPermitidas,
+                nombreCompleto,
+                fechaNacimiento,
+                nacionalidad,
+                cedula,
+                avatar,
+                correoElectronico,
+                nombreUsuario,
+                contrasenia,
+                confirmarContrasenia,
+                cantidadMaximaCanciones,
+                cantidadMaximaListas
+        );
+    }
+
+    // Método para iniciar sesión como administrador
+    public boolean iniciarSesionAdministrador(String nombreUsuario, String contrasenia) {
+
+        // Verifica que exista un administrador.
+        if (administrador == null) {
+            return false;
         }
 
-        usuariosFinales.add(usuarioFinal);
-        System.out.println("Usuario registrado correctamente.");
+        // Verifica el nombre de usuario.
+        boolean usuarioCorrecto =
+                administrador.getNombreUsuario()
+                        .equals(nombreUsuario);
+
+        // Verifica la contraseña.
+        boolean contraseniaCorrecta =
+                administrador.getContrasenia()
+                        .equals(contrasenia);
+
+        // Devuelve true solamente si ambas credenciales coinciden.
+        if (usuarioCorrecto && contraseniaCorrecta) {
+            return true;
+        }
+
+        return false;
     }
 
-    public void registrarCancion(Cancion cancion) {
+    // Método para iniciar sesión como usuario final
+    public UsuarioFinal iniciarSesionUsuarioFinal(String nombreUsuario, String contrasenia) {
+
+        return sistemaAutenticacion.iniciarSesion(
+                usuariosFinales,
+                nombreUsuario,
+                contrasenia
+        );
+    }
+
+    // Método para registrar una canción en el catálogo
+    public boolean registrarCancion(Cancion cancion) {
+
+        // Verifica que la canción recibida exista.
         if (cancion == null) {
             System.out.println("No se puede registrar una canción vacía.");
-            return;
+            return false;
         }
 
+        // Verifica que no exista una canción con el mismo nombre.
+        if (buscarCancionPorNombre(cancion.getNombre()) != null) {
+            System.out.println(
+                    "Ya existe una canción con ese nombre en el catálogo.");
+            return false;
+        }
+
+        // Agrega la canción al catálogo principal.
         catalogoCanciones.add(cancion);
-        System.out.println("Canción agregada al catálogo correctamente.");
+
+        System.out.println(
+                "Canción agregada al catálogo correctamente.");
+
+        return true;
     }
 
     // Metodo para buscar un usuario por su nombre de usuario
     public UsuarioFinal buscarUsuarioPorNombreUsuario(String nombreUsuario) {
 
+        // Recorre todos los usuarios registrados.
         for (int i = 0; i < usuariosFinales.size(); i++) {
 
+            // Obtiene el usuario ubicado en la posición actual.
             UsuarioFinal usuario = usuariosFinales.get(i);
 
+            // Verifica si el nombre coincide.
             if (usuario.getNombreUsuario().equalsIgnoreCase(nombreUsuario)) {
                 return usuario;
             }
         }
+        // Devuelve null si no encuentra el usuario.
         return null;
     }
 
     // Metodo para buscar una canción por su nombre
     public Cancion buscarCancionPorNombre(String nombre) {
 
+        // Verifica que el nombre recibido sea válido.
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return null;
+        }
+
+        // Recorre todo el catálogo.
         for (int i = 0; i < catalogoCanciones.size(); i++) {
 
+            // Obtiene la canción ubicada en la posición actual.
             Cancion cancion = catalogoCanciones.get(i);
 
+            // Verifica si el nombre coincide.
             if (cancion.getNombre().equalsIgnoreCase(nombre)) {
                 return cancion;
             }
         }
+        // Devuelve null si no encuentra la canción.
         return null;
     }
 
     // Metodo para buscar canciones por género
     public ArrayList<Cancion> buscarCancionesPorGenero(String genero) {
 
+        // Lista donde se guardan las canciones encontradas.
         ArrayList<Cancion> cancionesEncontradas = new ArrayList<>();
 
+        // Recorre el catálogo completo.
         for (int i = 0; i < catalogoCanciones.size(); i++) {
 
             Cancion cancion = catalogoCanciones.get(i);
 
+            // Agrega la canción si el género coincide.
             if (cancion.getGenero().equalsIgnoreCase(genero)) {
                 cancionesEncontradas.add(cancion);
             }
@@ -119,57 +289,20 @@ public class Aplicacion {
     // Metodo para buscar canciones por artista
     public ArrayList<Cancion> buscarCancionesPorArtista(String artista) {
 
+        // Lista donde se guardan las canciones encontradas.
         ArrayList<Cancion> cancionesEncontradas = new ArrayList<>();
 
+        // Recorre el catálogo completo.
         for (int i = 0; i < catalogoCanciones.size(); i++) {
 
             Cancion cancion = catalogoCanciones.get(i);
 
+            // Agrega la canción si el artista coincide.
             if (cancion.getArtista().equalsIgnoreCase(artista)) {
                 cancionesEncontradas.add(cancion);
             }
         }
         return cancionesEncontradas;
-    }
-
-    // Metodo para iniciar sesión del administrador
-    public boolean iniciarSesionAdministrador(String nombreUsuario, String contrasenia) {
-
-        // Verifica que exista un administrador registrado.
-        if (administrador == null) {
-            return false;
-        }
-        // Verifica que el nombre de usuario y la contraseña sean correctos.
-        if (administrador.getNombreUsuario().equals(nombreUsuario)
-            && administrador.getContrasenia().equals(contrasenia)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Metodo para iniciar sesión de un usuario final
-    public UsuarioFinal iniciarSesionUsuarioFinal(String nombreUsuario, String contrasenia) {
-
-        // Recorre la lista de usuarios finales registrados en la aplicación.
-        for (int i = 0; i < usuariosFinales.size(); i++) {
-
-            // Obtiene el usuario ubicado en la posición actual del ArrayList.
-            UsuarioFinal usuario = usuariosFinales.get(i);
-
-            // Verifica si el nombre de usuario ingresado coincide con el del usuario actual.
-            boolean usuarioCorrecto = usuario.getNombreUsuario().equals(nombreUsuario);
-
-            // Verifica si la contraseña ingresada coincide con la del usuario actual.
-            boolean contraseniaCorrecta = usuario.getContrasenia().equals(contrasenia);
-
-            // Si ambas credenciales son correctas, devuelve el usuario que inició sesión.
-            if (usuarioCorrecto && contraseniaCorrecta) {
-                return usuario;
-            }
-        }
-        // Si ningún usuario coincide con las credenciales ingresadas, devuelve null.
-        return null;
     }
 
     // Metodo para mostrar todas las canciones registradas en el catálogo
@@ -181,7 +314,7 @@ public class Aplicacion {
             return;
         }
 
-        System.out.println("\nCatálogo de canciones:");
+        System.out.println("\n===== CATÁLOGO DE CANCIONES =====");
 
         // Recorre todas las canciones almacenadas en el catálogo.
         for (int i = 0; i < catalogoCanciones.size(); i++) {
@@ -189,96 +322,59 @@ public class Aplicacion {
             // Obtiene la canción ubicada en la posición actual del ArrayList.
             Cancion cancion = catalogoCanciones.get(i);
 
+            System.out.println(
+                    "\nCanción número " + (i + 1));
+
             // Muestra la información de la canción.
             System.out.println("---------------------------");
             System.out.println(cancion);
         }
     }
 
+    // Método para mostrar los usuarios registrados
     public void mostrarUsuariosFinales() {
+
+        // Verifica si existen usuarios.
         if (usuariosFinales.isEmpty()) {
             System.out.println("No hay usuarios finales registrados.");
             return;
         }
 
-        System.out.println("\nUsuarios registrados:");
+        System.out.println("\n===== USUARIOS REGISTRADOS =====");
 
+        // Recorre todos los usuarios registrados.
         for (int i = 0; i < usuariosFinales.size(); i++) {
 
             UsuarioFinal usuario = usuariosFinales.get(i);
+
+            System.out.println(
+                    "\nUsuario número " + (i + 1));
 
             System.out.println("---------------------------");
             System.out.println(usuario);
         }
     }
 
-    // Metodo para validar que una contraseña cumpla con los requisitos establecidos
-    public boolean validarContrasenia(String contrasenia) {
+    // Método para mostrar las nacionalidades disponibles
+    public void mostrarNacionalidadesPermitidas() {
 
-        // Verifica que la contraseña no sea nula.
-        if (contrasenia == null) {
-            return false;
-        }
+        System.out.println("\nNacionalidades disponibles:");
 
-        // Verifica que la longitud esté entre 8 y 12 caracteres.
-        if (contrasenia.length() < 8 || contrasenia.length() > 12) {
-            return false;
-        }
+        for (int i = 0;
+             i < nacionalidadesPermitidas.size();
+             i++) {
 
-        // Variables para verificar si la contraseña contiene cada uno de los requisitos.
-        boolean tieneMayuscula = false;
-        boolean tieneMinuscula = false;
-        boolean tieneNumero = false;
-        boolean tieneEspecial = false;
-
-        // Recorre todos los caracteres de la contraseña.
-        for (int i = 0; i < contrasenia.length(); i++) {
-
-            // Obtiene el carácter ubicado en la posición actual.
-            char caracter = contrasenia.charAt(i);
-
-            // Verifica si el carácter es una letra mayúscula.
-            if (Character.isUpperCase(caracter)) {
-                tieneMayuscula = true;
-
-                // Verifica si el carácter es una letra minúscula.
-            } else if (Character.isLowerCase(caracter)) {
-                tieneMinuscula = true;
-
-                // Verifica si el carácter es un número.
-            } else if (Character.isDigit(caracter)) {
-                tieneNumero = true;
-
-                // Si no cumple ninguna de las condiciones anteriores,
-                // se considera un carácter especial.
-            } else {
-                tieneEspecial = true;
-            }
-        }
-        // Devuelve true únicamente si la contraseña cumple con todos los requisitos.
-        if (tieneMayuscula && tieneMinuscula && tieneNumero && tieneEspecial){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Metodo para verificar la confirmacion de la contraseña
-    public boolean confirmarContrasenia(String contrasenia, String confirmacion) {
-        if (contrasenia == null || confirmacion == null) {
-            return false;
-        }
-
-        if (contrasenia.equals(confirmacion)){
-            return true;
-        } else {
-            return false;
+            System.out.println(
+                    (i + 1) + ". "
+                            + nacionalidadesPermitidas.get(i));
         }
     }
 
     public String toString() {
+
         String estadoAdministrador;
 
+        // Determina si existe un administrador registrado.
         if (administrador != null) {
             estadoAdministrador = "Sí";
         } else {
