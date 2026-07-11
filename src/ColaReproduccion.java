@@ -45,7 +45,7 @@ public class ColaReproduccion {
         Cancion cancion = cola.poll();
 
         // El método reproducir también incrementa el contador de reproducciones.
-        cancion.reproducir();
+        cancion.aumentarReproduccion();
     }
 
     // Método para eliminar la primera canción sin reproducirla.

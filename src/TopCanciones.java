@@ -15,7 +15,7 @@ public class TopCanciones {
         Collections.sort(copia, new Comparator<Cancion>() {
             @Override
             public int compare(Cancion c1, Cancion c2) {
-                return Double.compare(c2.getCalificacionPromedio(), c1.getCalificacionPromedio());
+                return Double.compare(c2.getCalificacion(), c1.getCalificacion());
             }
         });
 
@@ -70,7 +70,7 @@ public class TopCanciones {
             System.out.println((i + 1) + ". " +
                     cancion.getNombre() + " - " +
                     cancion.getArtista() +
-                    " | Calificación: " + cancion.getCalificacionPromedio() +
+                    " | Calificación: " + cancion.getCalificacion() +
                     " | Compras: " + cancion.getVecesComprada() +
                     " | Agregada a listas: " + cancion.getVecesAgregadaAListas());
         }

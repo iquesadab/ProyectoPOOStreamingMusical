@@ -153,7 +153,7 @@ public class Cancion {
     }
 
     // Reproduce la canción y aumenta su contador de reproducciones.
-    public void reproducir() {
+    public void aumentarReproduccion() {
         vecesReproducida++;
 
         System.out.println("Reproduciendo: " + nombre + " - " + artista);

@@ -131,7 +131,7 @@ public class ListaReproduccion {
 
             Cancion cancion = canciones.get(i);
 
-            cancion.reproducir();
+            cancion.aumentarReproduccion();
         }
     }
 
