@@ -4,18 +4,23 @@ public abstract class Usuario {
     protected String correoElectronico;
     protected String nombreUsuario;
     protected String contrasenia;
+    protected ColaReproduccion colaReproduccion;
 
     // Constructor
     public Usuario(String correoElectronico, String nombreUsuario, String contrasenia) {
         this.correoElectronico = correoElectronico;
         this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
+
+        // La cola de reproducción se crea como parte del usuario.
+        this.colaReproduccion = new ColaReproduccion();
     }
 
     // Getters y Setters
     public String getCorreoElectronico() { return correoElectronico; }
     public String getNombreUsuario() { return nombreUsuario; }
     public String getContrasenia() { return contrasenia; }
+    public ColaReproduccion getColaReproduccion() { return colaReproduccion; }
 
     public void setCorreoElectronico(String correoElectronico) { this.correoElectronico = correoElectronico; }
     public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
@@ -32,18 +37,22 @@ public abstract class Usuario {
 
     // Valida los requisitos fuertes de la contraseña
     public static boolean esContraseniaValida(String contrasenia) {
-        if (contrasenia == null || contrasenia.length() < 8) return false;
+
+        // Verifica que la contraseña exista y tenga entre 8 y 12 caracteres.
+        if (contrasenia == null || contrasenia.length() < 8 || contrasenia.length() > 12) return false;
 
         boolean tieneMayuscula = false;
+        boolean tieneMinuscula = false;
         boolean tieneNumero = false;
         boolean tieneEspecial = false;
 
         for (char c : contrasenia.toCharArray()) {
             if (Character.isUpperCase(c)) tieneMayuscula = true;
+            if (Character.isLowerCase(c)) tieneMinuscula = true;
             if (Character.isDigit(c))     tieneNumero = true;
             if (!Character.isLetterOrDigit(c)) tieneEspecial = true;
         }
-        return tieneMayuscula && tieneNumero && tieneEspecial;
+        return tieneMayuscula && tieneMinuscula && tieneNumero && tieneEspecial;
     }
 
     @Override

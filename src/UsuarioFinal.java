@@ -14,7 +14,6 @@ public class UsuarioFinal extends Usuario {
 
     private Cancion[] cancionesCompradas;
     private ListaReproduccion[] listasReproduccion;
-    private ColaReproduccion colaReproduccion;
 
     private int cantidadCancionesCompradas;
     private int cantidadListasReproduccion;
@@ -32,12 +31,17 @@ public class UsuarioFinal extends Usuario {
         this.fechaNacimiento = fechaNacimiento;
         this.nacionalidad = nacionalidad;
         this.cedula = cedula;
-        this.avatar = avatar;
+
+        if (avatar == null || avatar.trim().isEmpty()) {
+            this.avatar = "avatar_default.png";
+        } else {
+            this.avatar = avatar;
+        }
+
         this.saldo = BONO_INICIAL;
 
         this.cancionesCompradas = new Cancion[cantidadMaximaCanciones];
         this.listasReproduccion = new ListaReproduccion[cantidadMaximaListas];
-        this.colaReproduccion = new ColaReproduccion();
 
         this.cantidadCancionesCompradas = 0;
         this.cantidadListasReproduccion = 0;
@@ -68,10 +72,6 @@ public class UsuarioFinal extends Usuario {
     public ListaReproduccion[] getListasReproduccion()
     { return listasReproduccion; }
 
-    public ColaReproduccion getColaReproduccion()
-    { return colaReproduccion; }
-
-
     public void setNombreCompleto(String nombreCompleto)
     { this.nombreCompleto = nombreCompleto; }
 
@@ -96,35 +96,64 @@ public class UsuarioFinal extends Usuario {
     }
 
     // Cambio de contraseña usando la validación de la clase padre
-    public boolean cambiarContrasenia(String contraseniaActual, String nuevaContrasenia) {
-        if (!this.contrasenia.equals(contraseniaActual)) {
+    public boolean cambiarContrasenia(String contraseniaActual, String nuevaContrasenia,  String confirmacionNuevaContrasenia) {
+        // Verifica que la contraseña actual sea correcta.
+        if (contrasenia.equals(contraseniaActual)) {
             System.out.println("La contraseña actual es incorrecta.");
             return false;
         }
 
+        // Verifica que la nueva contraseña cumpla los requisitos.
         if (!Usuario.esContraseniaValida(nuevaContrasenia)) {
             System.out.println("La nueva contraseña no cumple los requisitos:" +
-                    "\n- Mínimo 8 caracteres." +
-                    "\n- Al menos una mayúscula." +
-                    "\n- Al menos un número." +
-                    "\n- Al menos un carácter especial.");
+                    "\n- Debe tener entre 8 y 12 caracteres." +
+                    "\n- Debe incluir al menos una letra mayúscula." +
+                    "\n- Debe incluir al menos una letra minúscula." +
+                    "\n- Debe incluir al menos un número." +
+                    "\n- Debe incluir al menos un carácter especial.");
             return false;
         }
 
+        // Verifica que la nueva contraseña sea diferente de la actual.
         if (nuevaContrasenia.equals(contraseniaActual)) {
             System.out.println("La nueva contraseña no puede ser igual a la actual.");
             return false;
         }
 
-        this.contrasenia = nuevaContrasenia;
+        // Verifica que la confirmación coincida con la nueva contraseña.
+        if (!nuevaContrasenia.equals(confirmacionNuevaContrasenia)) {
+            System.out.println("La confirmación de la nueva contraseña no coincide.");
+            return false;
+        }
+
+        contrasenia = nuevaContrasenia;
+
         System.out.println("Contraseña actualizada correctamente.");
         return true;
     }
 
+    // Método para verificar si el usuario ya compró una canción
+    public boolean tieneCancionComprada(Cancion cancion) {
+
+        for (int i = 0; i < cantidadCancionesCompradas; i++) {
+
+            if (cancionesCompradas[i] == cancion) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Compra y gestión de música
     public void comprarCancion(Cancion cancion) {
+
         if (cancion == null) {
             System.out.println("La canción no existe.");
+            return;
+        }
+
+        if (tieneCancionComprada(cancion)) {
+            System.out.println("La canción ya fue comprada anteriormente.");
             return;
         }
 
@@ -133,14 +162,34 @@ public class UsuarioFinal extends Usuario {
             return;
         }
 
-        if (saldo >= cancion.getPrecio()) {
-            cancionesCompradas[cantidadCancionesCompradas] = cancion;
-            cantidadCancionesCompradas++;
-            saldo = saldo - cancion.getPrecio();
-            System.out.println("Canción comprada correctamente.");
-        } else {
+        if (saldo < cancion.getPrecio()) {
             System.out.println("Saldo insuficiente para comprar la canción.");
+            return;
         }
+
+        cancionesCompradas[cantidadCancionesCompradas] = cancion;
+        cantidadCancionesCompradas++;
+
+        saldo = saldo - cancion.getPrecio();
+
+        // Se utiliza para generar el Top 3 de canciones más compradas.
+        cancion.aumentarVecesComprada();
+
+        System.out.println("Canción comprada correctamente.");
+    }
+
+    // Método para recargar el saldo del usuario
+    public void recargarSaldo(float monto) {
+
+        if (monto <= 0) {
+            System.out.println("El monto de la recarga debe ser mayor que cero.");
+            return;
+        }
+
+        saldo = saldo + monto;
+
+        System.out.println("Recarga realizada correctamente.");
+        System.out.println("Nuevo saldo: $" + saldo);
     }
 
     public void crearListaReproduccion(String nombre) {
@@ -156,6 +205,42 @@ public class UsuarioFinal extends Usuario {
         System.out.println("Lista de reproducción creada correctamente.");
     }
 
+    // Método para calificar una canción comprada
+    public void calificarCancion(Cancion cancion, float calificacion) {
+
+        if (cancion == null) {
+            System.out.println("La canción no existe.");
+            return;
+        }
+
+        if (!tieneCancionComprada(cancion)) {
+            System.out.println("Solo se pueden calificar canciones compradas.");
+            return;
+        }
+
+        if (calificacion < 0.0f || calificacion > 5.0f) {
+            System.out.println("La calificación debe estar entre 0.0 y 5.0.");
+            return;
+        }
+
+        cancion.setCalificacion(calificacion);
+
+        System.out.println("Canción calificada correctamente.");
+    }
+
+    // Método para verificar si una lista pertenece al usuario
+    public boolean tieneListaReproduccion(ListaReproduccion listaReproduccion) {
+
+        for (int i = 0; i < cantidadListasReproduccion; i++) {
+
+            if (listasReproduccion[i] == listaReproduccion) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void agregarCancionALista(Cancion cancion, ListaReproduccion listaReproduccion) {
         if (cancion == null) {
             System.out.println("La canción no existe.");
@@ -164,6 +249,18 @@ public class UsuarioFinal extends Usuario {
 
         if (listaReproduccion == null) {
             System.out.println("La lista de reproducción no existe.");
+            return;
+        }
+
+        if (!tieneCancionComprada(cancion)) {
+            System.out.println(
+                    "La canción debe haber sido comprada antes de agregarla a una lista.");
+            return;
+        }
+
+        if (!tieneListaReproduccion(listaReproduccion)) {
+            System.out.println(
+                    "La lista de reproducción no pertenece al usuario.");
             return;
         }
 
