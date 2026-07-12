@@ -267,6 +267,32 @@ public class Aplicacion {
         return null;
     }
 
+    // Metodo para buscar canciones por nombre (coincidencia parcial).
+    // A diferencia de buscarCancionPorNombre(), que se usa para validar
+    // duplicados y ubicar una canción exacta (por ejemplo al comprarla),
+    // este método sirve para la función de búsqueda general y devuelve
+    // todas las canciones cuyo nombre contenga el texto ingresado.
+    public ArrayList<Cancion> buscarCancionesPorNombre(String nombre) {
+
+        ArrayList<Cancion> cancionesEncontradas = new ArrayList<>();
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return cancionesEncontradas;
+        }
+
+        String nombreBuscado = nombre.toLowerCase();
+
+        for (int i = 0; i < catalogoCanciones.size(); i++) {
+
+            Cancion cancion = catalogoCanciones.get(i);
+
+            if (cancion.getNombre().toLowerCase().contains(nombreBuscado)) {
+                cancionesEncontradas.add(cancion);
+            }
+        }
+        return cancionesEncontradas;
+    }
+
     // Metodo para buscar canciones por género
     public ArrayList<Cancion> buscarCancionesPorGenero(String genero) {
 
@@ -303,6 +329,26 @@ public class Aplicacion {
             }
         }
         return cancionesEncontradas;
+    }
+
+    // Metodo para mostrar el resultado de una búsqueda de canciones.
+    public void mostrarCancionesEncontradas(ArrayList<Cancion> canciones) {
+
+        if (canciones.isEmpty()) {
+            System.out.println("No se encontraron canciones con ese criterio.");
+            return;
+        }
+
+        System.out.println("\n===== CANCIONES ENCONTRADAS =====");
+
+        for (int i = 0; i < canciones.size(); i++) {
+
+            Cancion cancion = canciones.get(i);
+
+            System.out.println("\nCanción número " + (i + 1));
+            System.out.println("---------------------------");
+            System.out.println(cancion);
+        }
     }
 
     // Metodo para mostrar todas las canciones registradas en el catálogo

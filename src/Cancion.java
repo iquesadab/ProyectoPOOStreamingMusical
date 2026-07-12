@@ -7,11 +7,20 @@ public class Cancion {
     private String genero;
     private LocalDate fechaLanzamiento;
     private float precio;
-    private float calificacion;
     private String artista;
     private String compositor;
     private String nombreAlbum;
     private String caratulaAlbum;
+
+    // Calificación actualmente mostrada. Antes de recibir calificaciones
+    // de usuarios, corresponde a la calificación inicial ingresada al
+    // registrar la canción; luego pasa a ser el promedio de las
+    // calificaciones recibidas.
+    private float calificacion;
+
+    // Acumuladores utilizados para calcular la calificación promedio.
+    private float sumaCalificaciones;
+    private int cantidadCalificaciones;
 
     // Contadores utilizados para generar estadísticas y Top 3
     private int vecesComprada;
@@ -50,6 +59,11 @@ public class Cancion {
         this.vecesComprada = 0;
         this.vecesAgregadaAListas = 0;
         this.vecesReproducida = 0;
+
+        // Todavía no hay calificaciones de usuarios, por lo que se
+        // muestra la calificación inicial hasta que llegue la primera.
+        this.sumaCalificaciones = 0;
+        this.cantidadCalificaciones = 0;
     }
 
     // Getters
@@ -124,6 +138,10 @@ public class Cancion {
         this.calificacion = calificacion;
     }
 
+    public int getCantidadCalificaciones() {
+        return cantidadCalificaciones;
+    }
+
     public void setArtista(String artista) {
         this.artista = artista;
     }
@@ -141,6 +159,16 @@ public class Cancion {
     }
 
     // Métodos
+
+    // Registra una nueva calificación de usuario y recalcula el promedio.
+    // Este es el método que se debe usar para calificar la canción; el
+    // promedio queda reflejado automáticamente en getCalificacion().
+    public void agregarCalificacion(float nuevaCalificacion) {
+        sumaCalificaciones = sumaCalificaciones + nuevaCalificacion;
+        cantidadCalificaciones++;
+
+        calificacion = sumaCalificaciones / cantidadCalificaciones;
+    }
 
     // Aumenta el contador cada vez que un usuario compra la canción.
     public void aumentarVecesComprada() {
@@ -168,6 +196,7 @@ public class Cancion {
                 "\nFecha de lanzamiento: " + fechaLanzamiento +
                 "\nPrecio: $" + precio +
                 "\nCalificación: " + calificacion +
+                " (" + cantidadCalificaciones + " calificaciones)" +
                 "\nÁlbum: " + nombreAlbum +
                 "\nCarátula: " + caratulaAlbum +
                 "\nVeces comprada: " + vecesComprada +

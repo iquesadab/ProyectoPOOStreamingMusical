@@ -186,9 +186,11 @@ public class UsuarioFinal extends Usuario {
             return;
         }
 
-        cancion.setCalificacion(calificacion);
+        // Se registra la calificación y la canción recalcula su promedio.
+        cancion.agregarCalificacion(calificacion);
 
         System.out.println("Canción calificada correctamente.");
+        System.out.println("Nueva calificación promedio: " + cancion.getCalificacion());
     }
 
     // Método para verificar si una lista pertenece al usuario
