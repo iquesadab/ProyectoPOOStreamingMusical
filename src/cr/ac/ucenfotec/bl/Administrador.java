@@ -1,8 +1,10 @@
+package cr.ac.ucenfotec.bl;
+
 public class Administrador extends Usuario {
 
     // Constructor
     public Administrador(String correoElectronico, String nombreUsuario, String contrasenia) {
-        // Invoca al constructor de la clase padre (Usuario)
+        // Invoca al constructor de la clase padre (cr.ac.ucenfotec.bl.Usuario)
         super(correoElectronico, nombreUsuario, contrasenia);
     }
 
@@ -18,8 +20,8 @@ public class Administrador extends Usuario {
 
     @Override
     public String toString() {
-        return "\nInformación del Administrador\n" +
+        return "\nInformación del cr.ac.ucenfotec.bl.Administrador\n" +
                 "Correo electrónico: " + correoElectronico + "\n" +
-                "Usuario: " + nombreUsuario;
+                "cr.ac.ucenfotec.bl.Usuario: " + nombreUsuario;
     }
 }

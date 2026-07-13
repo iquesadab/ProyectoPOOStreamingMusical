@@ -1,3 +1,5 @@
+package cr.ac.ucenfotec.bl;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,7 +17,7 @@ public class TopCanciones {
         Collections.sort(copia, new Comparator<Cancion>() {
             @Override
             public int compare(Cancion c1, Cancion c2) {
-                return Double.compare(c2.getCalificacion(), c1.getCalificacion());
+                return Float.compare(c2.getCalificacion(), c1.getCalificacion());
             }
         });
 

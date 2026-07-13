@@ -1,3 +1,7 @@
+package cr.ac.ucenfotec.ui;
+
+import cr.ac.ucenfotec.bl.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -112,8 +116,8 @@ public class Main {
             String confirmarContrasenia = entrada.readLine();
 
             /*
-             * Aplicacion se encarga de validar los datos y crear
-             * el objeto Administrador.
+             * cr.ac.ucenfotec.bl.Aplicacion se encarga de validar los datos y crear
+             * el objeto cr.ac.ucenfotec.bl.Administrador.
              */
             administradorRegistrado =
                     aplicacion.registrarAdministrador(
@@ -187,12 +191,15 @@ public class Main {
             System.out.println("1. Registrar canción");
             System.out.println("2. Mostrar catálogo de canciones");
             System.out.println("3. Buscar canción por nombre");
-            System.out.println("4. Mostrar usuarios registrados");
-            System.out.println("5. Agregar canción a la cola");
-            System.out.println("6. Mostrar cola de reproducción");
-            System.out.println("7. Reproducir siguiente canción");
-            System.out.println("8. Cambiar contraseña");
-            System.out.println("9. Cerrar sesión");
+            System.out.println("4. Buscar canciones por género");
+            System.out.println("5. Buscar canciones por artista");
+            System.out.println("6. Mostrar usuarios registrados");
+            System.out.println("7. Agregar canción a la cola");
+            System.out.println("8. Mostrar cola de reproducción");
+            System.out.println("9. Reproducir siguiente canción");
+            System.out.println("10. Consultar Top 3");
+            System.out.println("11. Cambiar contraseña");
+            System.out.println("12. Cerrar sesión");
             System.out.println(
                     "============================================");
 
@@ -213,14 +220,22 @@ public class Main {
                     break;
 
                 case 4:
-                    aplicacion.mostrarUsuariosFinales();
+                    buscarCancionesPorGenero(aplicacion);
                     break;
 
                 case 5:
-                    agregarCancionColaAdministrador(aplicacion);
+                    buscarCancionesPorArtista(aplicacion);
                     break;
 
                 case 6:
+                    aplicacion.mostrarUsuariosFinales();
+                    break;
+
+                case 7:
+                    agregarCancionColaAdministrador(aplicacion);
+                    break;
+
+                case 8:
                     System.out.println(
                             "\n===== COLA DEL ADMINISTRADOR =====");
 
@@ -229,17 +244,21 @@ public class Main {
                                     .getColaReproduccion());
                     break;
 
-                case 7:
+                case 9:
                     aplicacion.getAdministrador()
                             .getColaReproduccion()
                             .reproducirSiguiente();
                     break;
 
-                case 8:
+                case 10:
+                    menuTop3(aplicacion);
+                    break;
+
+                case 11:
                     cambiarContraseniaAdministrador(aplicacion);
                     break;
 
-                case 9:
+                case 12:
                     cerrarSesion = true;
                     System.out.println(
                             "\nSesión del administrador cerrada.");
@@ -309,7 +328,7 @@ public class Main {
                 caratulaAlbum
         );
 
-        // Aplicacion valida y agrega la canción al catálogo.
+        // cr.ac.ucenfotec.bl.Aplicacion valida y agrega la canción al catálogo.
         aplicacion.registrarCancion(nuevaCancion);
     }
 
@@ -338,6 +357,36 @@ public class Main {
         return cancionEncontrada;
     }
 
+    // Método para buscar canciones por género
+    public static void buscarCancionesPorGenero(
+            Aplicacion aplicacion) throws IOException {
+
+        System.out.print("\nIngrese el género que desea buscar: ");
+        String genero = entrada.readLine();
+
+        ArrayList<Cancion> cancionesEncontradas =
+                aplicacion.buscarCancionesPorGenero(genero);
+
+        aplicacion.mostrarCancionesEncontradas(
+                cancionesEncontradas
+        );
+    }
+
+    // Método para buscar canciones por artista
+    public static void buscarCancionesPorArtista(
+            Aplicacion aplicacion) throws IOException {
+
+        System.out.print("\nIngrese el artista que desea buscar: ");
+        String artista = entrada.readLine();
+
+        ArrayList<Cancion> cancionesEncontradas =
+                aplicacion.buscarCancionesPorArtista(artista);
+
+        aplicacion.mostrarCancionesEncontradas(
+                cancionesEncontradas
+        );
+    }
+
     // Método para agregar una canción a la cola del administrador.
     public static void agregarCancionColaAdministrador(
             Aplicacion aplicacion) throws IOException {
@@ -348,6 +397,57 @@ public class Main {
 
             aplicacion.getAdministrador()
                     .agregarCancionACola(cancion);
+        }
+    }
+
+    // Método para consultar los distintos Top 3 de canciones
+    public static void menuTop3(Aplicacion aplicacion)
+            throws IOException {
+
+        boolean volver = false;
+
+        while (!volver) {
+
+            System.out.println("\n===== TOP 3 DE CANCIONES =====");
+            System.out.println("1. Canciones mejor calificadas");
+            System.out.println("2. Canciones más compradas");
+            System.out.println("3. Canciones más agregadas a listas");
+            System.out.println("4. Volver");
+
+            int opcion = leerEntero("Seleccione una opción: ");
+
+            switch (opcion) {
+
+                case 1:
+                    aplicacion.getTopCanciones()
+                            .mostrarTop3MejorCalificadas(
+                                    aplicacion.getCatalogoCanciones()
+                            );
+                    break;
+
+                case 2:
+                    aplicacion.getTopCanciones()
+                            .mostrarTop3MasCompradas(
+                                    aplicacion.getCatalogoCanciones()
+                            );
+                    break;
+
+                case 3:
+                    aplicacion.getTopCanciones()
+                            .mostrarTop3MasAgregadasAListas(
+                                    aplicacion.getCatalogoCanciones()
+                            );
+                    break;
+
+                case 4:
+                    volver = true;
+                    break;
+
+                default:
+                    System.out.println(
+                            "La opción seleccionada no es válida.");
+                    break;
+            }
         }
     }
 
@@ -368,8 +468,8 @@ public class Main {
         String confirmacion = entrada.readLine();
 
         /*
-         * Este método debe existir en la clase Usuario o ser heredado
-         * por Administrador. Si todavía no está implementado, se
+         * Este método debe existir en la clase cr.ac.ucenfotec.bl.Usuario o ser heredado
+         * por cr.ac.ucenfotec.bl.Administrador. Si todavía no está implementado, se
          * integrará durante la revisión final.
          */
         aplicacion.getAdministrador().cambiarContrasenia(
@@ -441,7 +541,7 @@ public class Main {
 
         /*
          * Estos valores se conservan temporalmente porque
-         * UsuarioFinal todavía utiliza arreglos de tamaño fijo.
+         * cr.ac.ucenfotec.bl.UsuarioFinal todavía utiliza arreglos de tamaño fijo.
          */
         byte cantidadMaximaCanciones = 50;
         byte cantidadMaximaListas = 20;
@@ -520,14 +620,22 @@ public class Main {
             System.out.println("1. Mostrar mis datos");
             System.out.println("2. Mostrar catálogo");
             System.out.println("3. Buscar canción por nombre");
-            System.out.println("4. Comprar canción");
-            System.out.println("5. Recargar saldo");
-            System.out.println("6. Crear lista de reproducción");
-            System.out.println("7. Agregar canción a la cola");
-            System.out.println("8. Mostrar cola de reproducción");
-            System.out.println("9. Reproducir siguiente canción");
-            System.out.println("10. Cambiar contraseña");
-            System.out.println("11. Cerrar sesión");
+            System.out.println("4. Buscar canciones por género");
+            System.out.println("5. Buscar canciones por artista");
+            System.out.println("6. Comprar canción");
+            System.out.println("7. Recargar saldo");
+            System.out.println("8. Crear lista de reproducción");
+            System.out.println("9. Mostrar mis listas");
+            System.out.println("10. Agregar canción a una lista");
+            System.out.println("11. Reproducir una lista");
+            System.out.println("12. Calificar canción");
+            System.out.println("13. Agregar canción a la cola");
+            System.out.println("14. Mostrar cola de reproducción");
+            System.out.println("15. Reproducir siguiente canción");
+            System.out.println("16. Consultar Top 3");
+            System.out.println("17. Escuchar vista previa");
+            System.out.println("18. Cambiar contraseña");
+            System.out.println("19. Cerrar sesión");
             System.out.println(
                     "============================================");
 
@@ -548,46 +656,71 @@ public class Main {
                     break;
 
                 case 4:
-                    comprarCancion(aplicacion, usuario);
+                    buscarCancionesPorGenero(aplicacion);
                     break;
 
                 case 5:
-                    recargarSaldo(usuario);
+                    buscarCancionesPorArtista(aplicacion);
                     break;
 
                 case 6:
-                    crearListaReproduccion(usuario);
+                    comprarCancion(aplicacion, usuario);
                     break;
 
                 case 7:
-                    agregarCancionColaUsuario(
-                            aplicacion,
-                            usuario
-                    );
+                    recargarSaldo(usuario);
                     break;
 
                 case 8:
-                    System.out.println(
-                            "\n===== MI COLA DE REPRODUCCIÓN =====");
-
-                    System.out.println(
-                            usuario.getColaReproduccion());
+                    crearListaReproduccion(usuario);
                     break;
 
                 case 9:
-                    usuario.getColaReproduccion()
-                            .reproducirSiguiente();
+                    mostrarListasUsuario(usuario);
                     break;
 
                 case 10:
-                    cambiarContraseniaUsuario(usuario);
+                    agregarCancionALista(aplicacion, usuario);
                     break;
 
                 case 11:
-                    cerrarSesion = true;
+                    reproducirListaUsuario(usuario);
+                    break;
 
+                case 12:
+                    calificarCancion(aplicacion, usuario);
+                    break;
+
+                case 13:
+                    agregarCancionColaUsuario(aplicacion, usuario);
+                    break;
+
+                case 14:
                     System.out.println(
-                            "\nSesión del usuario cerrada.");
+                            "\n===== MI COLA DE REPRODUCCIÓN =====");
+
+                    System.out.println(usuario.getColaReproduccion());
+                    break;
+
+                case 15:
+                    usuario.getColaReproduccion().reproducirSiguiente();
+                    break;
+
+                case 16:
+                    menuTop3(aplicacion);
+                    break;
+
+                case 17:
+                    vistaPreviaCancion(aplicacion);
+                    break;
+
+                case 18:
+                    cambiarContraseniaUsuario(usuario);
+                    break;
+
+                case 19:
+                    cerrarSesion = true;
+                    System.out.println("\nSesión del usuario cerrada.");
                     break;
 
                 default:
@@ -632,6 +765,162 @@ public class Main {
         usuario.crearListaReproduccion(nombreLista);
     }
 
+    // Método para agregar una canción comprada a una lista de reproducción
+    public static void agregarCancionALista(
+            Aplicacion aplicacion,
+            UsuarioFinal usuario) throws IOException {
+
+        // Verifica si el usuario tiene listas creadas.
+        if (usuario.getCantidadListasReproduccion() == 0) {
+            System.out.println(
+                    "Primero debe crear una lista de reproducción.");
+            return;
+        }
+
+        System.out.println("\n===== MIS LISTAS DE REPRODUCCIÓN =====");
+
+        ListaReproduccion[] listas =
+                usuario.getListasReproduccion();
+
+        // Muestra únicamente las listas creadas por el usuario.
+        for (int i = 0;
+             i < usuario.getCantidadListasReproduccion();
+             i++) {
+
+            System.out.println(
+                    (i + 1) + ". " + listas[i].getNombre());
+        }
+
+        int opcionLista =
+                leerEntero("Seleccione una lista: ");
+
+        // Verifica que la opción seleccionada sea válida.
+        if (opcionLista < 1
+                || opcionLista >
+                usuario.getCantidadListasReproduccion()) {
+
+            System.out.println(
+                    "La lista seleccionada no es válida.");
+            return;
+        }
+
+        ListaReproduccion listaSeleccionada =
+                listas[opcionLista - 1];
+
+        // Busca la canción que el usuario desea agregar.
+        Cancion cancion =
+                buscarCancionPorNombre(aplicacion);
+
+        if (cancion != null) {
+            usuario.agregarCancionALista(
+                    cancion,
+                    listaSeleccionada
+            );
+        }
+    }
+
+    // Método para mostrar las listas de reproducción del usuario
+    public static void mostrarListasUsuario(UsuarioFinal usuario) {
+
+        // Verifica si el usuario tiene listas creadas.
+        if (usuario.getCantidadListasReproduccion() == 0) {
+            System.out.println(
+                    "El usuario todavía no tiene listas de reproducción.");
+            return;
+        }
+
+        ListaReproduccion[] listas =
+                usuario.getListasReproduccion();
+
+        System.out.println(
+                "\n===== MIS LISTAS DE REPRODUCCIÓN =====");
+
+        // Recorre solamente las posiciones ocupadas del arreglo.
+        for (int i = 0;
+             i < usuario.getCantidadListasReproduccion();
+             i++) {
+
+            System.out.println(
+                    "\nLista número " + (i + 1));
+
+            System.out.println("---------------------------");
+            System.out.println(listas[i]);
+        }
+    }
+
+    // Método para seleccionar y reproducir una lista del usuario
+    public static void reproducirListaUsuario(
+            UsuarioFinal usuario) throws IOException {
+
+        // Verifica si el usuario tiene listas creadas.
+        if (usuario.getCantidadListasReproduccion() == 0) {
+            System.out.println(
+                    "No tiene listas de reproducción para reproducir.");
+            return;
+        }
+
+        ListaReproduccion[] listas =
+                usuario.getListasReproduccion();
+
+        System.out.println(
+                "\n===== MIS LISTAS DE REPRODUCCIÓN =====");
+
+        // Muestra las listas disponibles.
+        for (int i = 0;
+             i < usuario.getCantidadListasReproduccion();
+             i++) {
+
+            System.out.println(
+                    (i + 1) + ". " + listas[i].getNombre());
+        }
+
+        int opcionLista =
+                leerEntero("Seleccione la lista que desea reproducir: ");
+
+        // Verifica que la opción esté dentro del rango permitido.
+        if (opcionLista < 1
+                || opcionLista >
+                usuario.getCantidadListasReproduccion()) {
+
+            System.out.println(
+                    "La lista seleccionada no es válida.");
+            return;
+        }
+
+        ListaReproduccion listaSeleccionada =
+                listas[opcionLista - 1];
+
+        // Reproduce todas las canciones de la lista.
+        listaSeleccionada.reproducirLista();
+    }
+
+    // Método para calificar una canción comprada por el usuario
+    public static void calificarCancion(
+            Aplicacion aplicacion,
+            UsuarioFinal usuario) throws IOException {
+
+        Cancion cancion =
+                buscarCancionPorNombre(aplicacion);
+
+        if (cancion == null) {
+            return;
+        }
+
+        float calificacion =
+                leerFloat(
+                        "Ingrese una calificación entre 0.0 y 5.0: "
+                );
+
+        /*
+         * cr.ac.ucenfotec.bl.UsuarioFinal verifica que la canción haya sido comprada
+         * y que la calificación esté dentro del rango permitido.
+         */
+        usuario.calificarCancion(
+                cancion,
+                calificacion
+        );
+    }
+
     // Método para agregar una canción a la cola del usuario.
     public static void agregarCancionColaUsuario(
             Aplicacion aplicacion,
@@ -642,6 +931,23 @@ public class Main {
         if (cancion != null) {
             usuario.agregarCancionACola(cancion);
         }
+    }
+
+    // Método para escuchar la vista previa de una canción
+    public static void vistaPreviaCancion(
+            Aplicacion aplicacion) throws IOException {
+
+        Cancion cancion =
+                buscarCancionPorNombre(aplicacion);
+
+        if (cancion == null) {
+            return;
+        }
+
+        Reproductor reproductor =
+                new Reproductor();
+
+        reproductor.reproducirVistaPrevia(cancion);
     }
 
     // Método para cambiar la contraseña del usuario final.

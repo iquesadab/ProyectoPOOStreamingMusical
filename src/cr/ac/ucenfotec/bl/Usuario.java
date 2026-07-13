@@ -1,4 +1,4 @@
-import java.time.LocalDate;
+package cr.ac.ucenfotec.bl;
 
 public abstract class Usuario {
     protected String correoElectronico;

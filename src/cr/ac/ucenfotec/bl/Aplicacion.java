@@ -1,3 +1,5 @@
+package cr.ac.ucenfotec.bl;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -13,6 +15,8 @@ public class Aplicacion {
 
     // Lista predeterminada de nacionalidades disponibles
     private ArrayList<String> nacionalidadesPermitidas;
+
+    private TopCanciones topCanciones;
 
     // Constructor
     public Aplicacion() {
@@ -31,6 +35,9 @@ public class Aplicacion {
 
         // Se agregan las nacionalidades permitidas en la aplicación.
         cargarNacionalidadesPermitidas();
+
+        // Se crea la lista de top canciones
+        this.topCanciones = new TopCanciones();
     }
 
     // Getters
@@ -49,6 +56,8 @@ public class Aplicacion {
     public SistemaAutenticacion getSistemaAutenticacion() { return sistemaAutenticacion; }
 
     public ArrayList<String> getNacionalidadesPermitidas() { return nacionalidadesPermitidas; }
+
+    public TopCanciones getTopCanciones() { return topCanciones; }
 
     // Métodos principales
 
@@ -146,7 +155,7 @@ public class Aplicacion {
             byte cantidadMaximaCanciones,
             byte cantidadMaximaListas) {
 
-        // SistemaAutenticacion valida, crea y agrega el usuario
+        // cr.ac.ucenfotec.bl.SistemaAutenticacion valida, crea y agrega el usuario
         // al ArrayList principal de la aplicación.
         return sistemaAutenticacion.registrarUsuario(
                 usuariosFinales,
@@ -175,8 +184,7 @@ public class Aplicacion {
 
         // Verifica el nombre de usuario.
         boolean usuarioCorrecto =
-                administrador.getNombreUsuario()
-                        .equals(nombreUsuario);
+                administrador.getNombreUsuario().equalsIgnoreCase(nombreUsuario);;
 
         // Verifica la contraseña.
         boolean contraseniaCorrecta =
@@ -394,7 +402,7 @@ public class Aplicacion {
             UsuarioFinal usuario = usuariosFinales.get(i);
 
             System.out.println(
-                    "\nUsuario número " + (i + 1));
+                    "\ncr.ac.ucenfotec.bl.Usuario número " + (i + 1));
 
             System.out.println("---------------------------");
             System.out.println(usuario);
@@ -416,6 +424,7 @@ public class Aplicacion {
         }
     }
 
+    @Override
     public String toString() {
 
         String estadoAdministrador;
@@ -428,7 +437,7 @@ public class Aplicacion {
         }
 
         return "Aplicación de Streaming Musical" +
-                "\nAdministrador registrado: " + estadoAdministrador +
+                "\ncr.ac.ucenfotec.bl.Administrador registrado: " + estadoAdministrador +
                 "\nCantidad de usuarios finales: " + usuariosFinales.size() +
                 "\nCantidad de canciones en catálogo: " + catalogoCanciones.size();
     }

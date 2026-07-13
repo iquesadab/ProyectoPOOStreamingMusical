@@ -1,3 +1,5 @@
+package cr.ac.ucenfotec.bl;
+
 import java.util.LinkedList;
 import java.util.Queue;
 

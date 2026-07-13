@@ -1,3 +1,5 @@
+package cr.ac.ucenfotec.bl;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -142,7 +144,7 @@ public class SistemaAutenticacion {
                 cantidadMaximaListas
         );
 
-        // Agrega el usuario a la colección principal de Aplicacion.
+        // Agrega el usuario a la colección principal de cr.ac.ucenfotec.bl.Aplicacion.
         usuariosFinales.add(nuevoUsuario);
 
         System.out.println("Usuario registrado correctamente.");
@@ -173,7 +175,7 @@ public class SistemaAutenticacion {
             // Verifica si el nombre de usuario coincide.
             boolean nombreUsuarioCorrecto =
                     usuario.getNombreUsuario()
-                            .equals(nombreUsuario);
+                            .equalsIgnoreCase(nombreUsuario);
 
             // Verifica si la contraseña coincide.
             boolean contraseniaCorrecta =
