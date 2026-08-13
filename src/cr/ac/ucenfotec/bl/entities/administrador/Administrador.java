@@ -5,26 +5,69 @@ import cr.ac.ucenfotec.bl.entities.usuario.Usuario;
 
 public class Administrador extends Usuario {
 
-    // Constructor
-    public Administrador(String correoElectronico, String nombreUsuario, String contrasenia) {
-        // Invoca al constructor de la clase padre (cr.ac.ucenfotec.bl.entities.usuario.Usuario)
-        super(correoElectronico, nombreUsuario, contrasenia);
+    public Administrador(
+            String correoElectronico,
+            String nombreUsuario,
+            String contrasenia) {
+
+        super(
+                correoElectronico,
+                nombreUsuario,
+                contrasenia
+        );
     }
 
-    // Métodos
+    public Administrador(
+            int id,
+            String correoElectronico,
+            String nombreUsuario,
+            String contrasenia) {
+
+        super(
+                id,
+                correoElectronico,
+                nombreUsuario,
+                contrasenia
+        );
+    }
+
     public void registrarCancion(Cancion cancion) {
-        System.out.println("El administrador " + nombreUsuario + " registró la canción " + cancion.getNombre());
+
+        if (cancion != null) {
+
+            System.out.println(
+                    "El administrador "
+                            + getNombreUsuario()
+                            + " registró la canción "
+                            + cancion.getNombre()
+            );
+        }
     }
 
     public void agregarCancionACola(Cancion cancion) {
-        colaReproduccion.agregarCancion(cancion);
-        System.out.println("La canción " + cancion.getNombre() + " fue agregada a la cola de reproducción.");
+
+        if (cancion != null) {
+
+            getColaReproduccion()
+                    .agregarCancion(cancion);
+
+            System.out.println(
+                    "La canción "
+                            + cancion.getNombre()
+                            + " fue agregada a la cola de reproducción."
+            );
+        }
     }
 
     @Override
     public String toString() {
-        return "\nInformación del cr.ac.ucenfotec.bl.entities.administrador.Administrador\n" +
-                "Correo electrónico: " + correoElectronico + "\n" +
-                "cr.ac.ucenfotec.bl.entities.usuario.Usuario: " + nombreUsuario;
+
+        return "Administrador{" +
+                "id=" + getId() +
+                ", correoElectronico='" +
+                getCorreoElectronico() + '\'' +
+                ", nombreUsuario='" +
+                getNombreUsuario() + '\'' +
+                '}';
     }
 }
