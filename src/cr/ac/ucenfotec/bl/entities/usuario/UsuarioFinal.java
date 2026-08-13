@@ -1,4 +1,7 @@
-package cr.ac.ucenfotec.bl;
+package cr.ac.ucenfotec.bl.entities.usuario;
+
+import cr.ac.ucenfotec.bl.entities.cancion.Cancion;
+import cr.ac.ucenfotec.bl.entities.listaReproduccion.ListaReproduccion;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -26,7 +29,7 @@ public class UsuarioFinal extends Usuario {
                         String nombreUsuario, String contrasenia,
                         byte cantidadMaximaCanciones, byte cantidadMaximaListas) {
 
-        // Se llama al constructor de cr.ac.ucenfotec.bl.Usuario
+        // Se llama al constructor de cr.ac.ucenfotec.bl.entities.usuario.Usuario
         super(correoElectronico, nombreUsuario, contrasenia);
 
         this.nombreCompleto = nombreCompleto;
@@ -265,7 +268,7 @@ public class UsuarioFinal extends Usuario {
 
     @Override
     public String toString() {
-        return "cr.ac.ucenfotec.bl.Usuario: " + nombreCompleto +
+        return "cr.ac.ucenfotec.bl.entities.usuario.Usuario: " + nombreCompleto +
                 "\nNombre de usuario: " + nombreUsuario +
                 "\nCorreo electrónico: " + correoElectronico +
                 "\nNacionalidad: " + nacionalidad +

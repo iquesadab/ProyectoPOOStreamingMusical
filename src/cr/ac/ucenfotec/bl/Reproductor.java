@@ -1,5 +1,8 @@
 package cr.ac.ucenfotec.bl;
 
+import cr.ac.ucenfotec.bl.entities.cancion.Cancion;
+import cr.ac.ucenfotec.bl.entities.listaReproduccion.ListaReproduccion;
+
 public class Reproductor {
 
     public void reproducirCancion(Cancion cancion) {

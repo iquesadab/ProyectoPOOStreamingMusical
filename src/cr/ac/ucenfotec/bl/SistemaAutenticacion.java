@@ -1,5 +1,8 @@
 package cr.ac.ucenfotec.bl;
 
+import cr.ac.ucenfotec.bl.entities.usuario.Usuario;
+import cr.ac.ucenfotec.bl.entities.usuario.UsuarioFinal;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;

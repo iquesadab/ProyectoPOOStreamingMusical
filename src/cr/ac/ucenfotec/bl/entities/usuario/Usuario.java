@@ -1,4 +1,6 @@
-package cr.ac.ucenfotec.bl;
+package cr.ac.ucenfotec.bl.entities.usuario;
+
+import cr.ac.ucenfotec.bl.entities.colaReproduccion.ColaReproduccion;
 
 public abstract class Usuario {
     protected String correoElectronico;

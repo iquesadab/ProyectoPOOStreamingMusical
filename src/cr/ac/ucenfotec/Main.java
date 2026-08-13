@@ -1,6 +1,9 @@
-package cr.ac.ucenfotec.ui;
+package cr.ac.ucenfotec;
 
 import cr.ac.ucenfotec.bl.*;
+import cr.ac.ucenfotec.bl.entities.cancion.Cancion;
+import cr.ac.ucenfotec.bl.entities.listaReproduccion.ListaReproduccion;
+import cr.ac.ucenfotec.bl.entities.usuario.UsuarioFinal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -117,7 +120,7 @@ public class Main {
 
             /*
              * cr.ac.ucenfotec.bl.Aplicacion se encarga de validar los datos y crear
-             * el objeto cr.ac.ucenfotec.bl.Administrador.
+             * el objeto cr.ac.ucenfotec.bl.entities.administrador.Administrador.
              */
             administradorRegistrado =
                     aplicacion.registrarAdministrador(
@@ -468,8 +471,8 @@ public class Main {
         String confirmacion = entrada.readLine();
 
         /*
-         * Este método debe existir en la clase cr.ac.ucenfotec.bl.Usuario o ser heredado
-         * por cr.ac.ucenfotec.bl.Administrador. Si todavía no está implementado, se
+         * Este método debe existir en la clase cr.ac.ucenfotec.bl.entities.usuario.Usuario o ser heredado
+         * por cr.ac.ucenfotec.bl.entities.administrador.Administrador. Si todavía no está implementado, se
          * integrará durante la revisión final.
          */
         aplicacion.getAdministrador().cambiarContrasenia(
@@ -541,7 +544,7 @@ public class Main {
 
         /*
          * Estos valores se conservan temporalmente porque
-         * cr.ac.ucenfotec.bl.UsuarioFinal todavía utiliza arreglos de tamaño fijo.
+         * cr.ac.ucenfotec.bl.entities.usuario.UsuarioFinal todavía utiliza arreglos de tamaño fijo.
          */
         byte cantidadMaximaCanciones = 50;
         byte cantidadMaximaListas = 20;
@@ -912,7 +915,7 @@ public class Main {
                 );
 
         /*
-         * cr.ac.ucenfotec.bl.UsuarioFinal verifica que la canción haya sido comprada
+         * cr.ac.ucenfotec.bl.entities.usuario.UsuarioFinal verifica que la canción haya sido comprada
          * y que la calificación esté dentro del rango permitido.
          */
         usuario.calificarCancion(

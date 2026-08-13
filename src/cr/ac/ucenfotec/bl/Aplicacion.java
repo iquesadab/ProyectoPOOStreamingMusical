@@ -1,5 +1,10 @@
 package cr.ac.ucenfotec.bl;
 
+import cr.ac.ucenfotec.bl.entities.cancion.Cancion;
+import cr.ac.ucenfotec.bl.entities.administrador.Administrador;
+import cr.ac.ucenfotec.bl.entities.usuario.Usuario;
+import cr.ac.ucenfotec.bl.entities.usuario.UsuarioFinal;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -402,7 +407,7 @@ public class Aplicacion {
             UsuarioFinal usuario = usuariosFinales.get(i);
 
             System.out.println(
-                    "\ncr.ac.ucenfotec.bl.Usuario número " + (i + 1));
+                    "\ncr.ac.ucenfotec.bl.entities.usuario.Usuario número " + (i + 1));
 
             System.out.println("---------------------------");
             System.out.println(usuario);
@@ -437,7 +442,7 @@ public class Aplicacion {
         }
 
         return "Aplicación de Streaming Musical" +
-                "\ncr.ac.ucenfotec.bl.Administrador registrado: " + estadoAdministrador +
+                "\ncr.ac.ucenfotec.bl.entities.administrador.Administrador registrado: " + estadoAdministrador +
                 "\nCantidad de usuarios finales: " + usuariosFinales.size() +
                 "\nCantidad de canciones en catálogo: " + catalogoCanciones.size();
     }
