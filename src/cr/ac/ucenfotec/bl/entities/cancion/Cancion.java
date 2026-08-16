@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class Cancion {
 
     // Atributos con la información de la canción
+    private int id;
     private String nombre;
     private String genero;
     private LocalDate fechaLanzamiento;
@@ -118,6 +119,10 @@ public class Cancion {
         return vecesReproducida;
     }
 
+    public int getId(){
+        return id;
+    }
+
     // Setters
 
     public void setNombre(String nombre) {
@@ -158,6 +163,10 @@ public class Cancion {
 
     public void setCaratulaAlbum(String caratulaAlbum) {
         this.caratulaAlbum = caratulaAlbum;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     // Métodos
@@ -215,4 +224,6 @@ public class Cancion {
                 "\nVeces agregada a listas: " + vecesAgregadaAListas +
                 "\nVeces reproducida: " + vecesReproducida;
     }
+
+
 }
