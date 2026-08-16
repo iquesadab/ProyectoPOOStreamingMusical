@@ -8,13 +8,20 @@ import java.util.ArrayList;
 public class ListaReproduccion {
 
     // Atributos
+    private int id;
     private String nombre;
     private LocalDate fechaCreacion;
     private float calificacion;
     private ArrayList<Cancion> canciones;
 
-    // Constructor
+    // Constructor utilizado al crear una lista nueva (todavía sin id de BD)
     public ListaReproduccion(String nombre, LocalDate fechaCreacion) {
+        this(0, nombre, fechaCreacion);
+    }
+
+    // Constructor utilizado al reconstruir una lista ya existente en la BD
+    public ListaReproduccion(int id, String nombre, LocalDate fechaCreacion) {
+        this.id = id;
         this.nombre = nombre;
         this.fechaCreacion = fechaCreacion;
         this.calificacion = 0;
@@ -22,6 +29,10 @@ public class ListaReproduccion {
     }
 
     // Getters
+
+    public int getId() {
+        return id;
+    }
 
     public String getNombre() {
         return nombre;
@@ -40,6 +51,10 @@ public class ListaReproduccion {
     }
 
     // Setters
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -74,6 +89,41 @@ public class ListaReproduccion {
         calcularCalificacion();
 
         System.out.println("Canción agregada a la lista correctamente.");
+    }
+
+    // Método para reconstruir la lista a partir de la base de datos, sin
+    // afectar los contadores de estadísticas de la canción (a diferencia
+    // de agregarCancion, que sí se usa cuando el usuario agrega en vivo).
+    public void agregarCancionSinContar(Cancion cancion) {
+
+        if (cancion == null) {
+            return;
+        }
+
+        canciones.add(cancion);
+        calcularCalificacion();
+    }
+
+    // Método para eliminar una canción de la lista de reproducción
+    public boolean eliminarCancion(Cancion cancion) {
+
+        // Verifica que la canción recibida exista.
+        if (cancion == null) {
+            System.out.println("La canción no existe.");
+            return false;
+        }
+
+        boolean eliminada = canciones.remove(cancion);
+
+        if (eliminada) {
+            // Actualiza la calificación promedio de la lista.
+            calcularCalificacion();
+            System.out.println("Canción eliminada de la lista correctamente.");
+        } else {
+            System.out.println("La canción no se encontraba en esta lista.");
+        }
+
+        return eliminada;
     }
 
     // Método para calcular el promedio de las calificaciones de las canciones
