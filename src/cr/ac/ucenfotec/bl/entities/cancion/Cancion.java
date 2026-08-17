@@ -169,6 +169,20 @@ public class Cancion {
         this.id = id;
     }
 
+    // Permiten reconstruir las estadísticas almacenadas en MySQL
+    // cuando una canción se carga nuevamente desde la base de datos.
+    public void setVecesComprada(int vecesComprada) {
+        this.vecesComprada = vecesComprada;
+    }
+
+    public void setVecesAgregadaAListas(int vecesAgregadaAListas) {
+        this.vecesAgregadaAListas = vecesAgregadaAListas;
+    }
+
+    public void setCantidadCalificaciones(int cantidadCalificaciones) {
+        this.cantidadCalificaciones = cantidadCalificaciones;
+    }
+
     // Métodos
 
     // Registra una nueva calificación de usuario y recalcula el promedio.
@@ -224,6 +238,4 @@ public class Cancion {
                 "\nVeces agregada a listas: " + vecesAgregadaAListas +
                 "\nVeces reproducida: " + vecesReproducida;
     }
-
-
 }

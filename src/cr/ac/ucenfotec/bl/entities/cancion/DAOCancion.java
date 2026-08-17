@@ -195,6 +195,51 @@ public class DAOCancion {
         );
     }
 
+    // Devuelve todas las canciones que un usuario ya compró.
+    // Se utiliza al iniciar sesión para reconstruir su colección.
+    public ArrayList<Cancion> listarCompradasPorUsuario(int idUsuario) throws Exception {
+
+        ArrayList<Cancion> canciones = new ArrayList<>();
+
+        String query =
+                "SELECT c.* FROM t_canciones c " +
+                        "INNER JOIN t_compras co ON c.id = co.id_cancion " +
+                        "WHERE co.id_usuario = ? ORDER BY c.nombre";
+
+        ResultSet resultado =
+                Connector.getConnection().ejecutarQuery(query, idUsuario);
+
+        while (resultado.next()) {
+            canciones.add(convertir(resultado));
+        }
+
+        return canciones;
+    }
+
+    // Cuenta cuántas veces ha sido comprada una canción.
+    public int contarCompras(int idCancion) throws Exception {
+
+        String query =
+                "SELECT COUNT(*) AS total FROM t_compras WHERE id_cancion = ?";
+
+        ResultSet resultado =
+                Connector.getConnection().ejecutarQuery(query, idCancion);
+
+        return resultado.next() ? resultado.getInt("total") : 0;
+    }
+
+    // Cuenta en cuántas listas de reproducción aparece una canción.
+    public int contarVecesAgregadaAListas(int idCancion) throws Exception {
+
+        String query =
+                "SELECT COUNT(*) AS total FROM t_canciones_listas WHERE id_cancion = ?";
+
+        ResultSet resultado =
+                Connector.getConnection().ejecutarQuery(query, idCancion);
+
+        return resultado.next() ? resultado.getInt("total") : 0;
+    }
+
     // =========================================================
     // CALIFICACIONES
     // =========================================================
@@ -276,6 +321,12 @@ public class DAOCancion {
         );
 
         cancion.setId(id);
+
+        // Las estadísticas se reconstruyen desde las tablas relacionales.
+        // De esta forma los Top 3 siguen siendo correctos al reiniciar.
+        cancion.setCantidadCalificaciones(contarCalificaciones(id));
+        cancion.setVecesComprada(contarCompras(id));
+        cancion.setVecesAgregadaAListas(contarVecesAgregadaAListas(id));
 
         return cancion;
     }

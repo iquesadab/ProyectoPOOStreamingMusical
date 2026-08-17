@@ -108,6 +108,22 @@ public class GestorCancion {
         return daoCancion.buscarPorArtista(artista.trim());
     }
 
+    // Carga desde MySQL la colección de canciones que el usuario
+    // había comprado en sesiones anteriores.
+    public void cargarCancionesCompradas(UsuarioFinal usuario) throws Exception {
+
+        if (usuario == null || usuario.getId() <= 0) {
+            return;
+        }
+
+        ArrayList<Cancion> compradas =
+                daoCancion.listarCompradasPorUsuario(usuario.getId());
+
+        for (Cancion cancion : compradas) {
+            usuario.cargarCancionComprada(cancion);
+        }
+    }
+
     // =========================================================
     // COMPRAR CANCIÓN
     // =========================================================
@@ -147,6 +163,9 @@ public class GestorCancion {
 
         daoCancion.registrarCompra(usuario.getId(), cancion.getId());
 
+        // También se agrega a la colección del objeto en memoria para que
+        // pueda reproducirse o agregarse a una lista inmediatamente.
+        usuario.cargarCancionComprada(cancion);
         cancion.aumentarVecesComprada();
     }
 

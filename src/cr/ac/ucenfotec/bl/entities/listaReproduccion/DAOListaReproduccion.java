@@ -85,6 +85,24 @@ public class DAOListaReproduccion {
         return listas;
     }
 
+    // Lista todas las playlists del sistema. Se utiliza únicamente
+    // para las funciones especiales del administrador.
+    public ArrayList<ListaReproduccion> listarTodas() throws Exception {
+
+        ArrayList<ListaReproduccion> listas = new ArrayList<>();
+
+        ResultSet resultado =
+                Connector.getConnection().ejecutarQuery(
+                        "SELECT * FROM t_listas_reproduccion ORDER BY id"
+                );
+
+        while (resultado.next()) {
+            listas.add(convertir(resultado));
+        }
+
+        return listas;
+    }
+
     /* =========================================================
     BUSCAR LISTAS POR NOMBRE (dentro de las listas del usuario)
     =========================================================

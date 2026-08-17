@@ -160,6 +160,10 @@ public class Controller {
         para que puedan emparejar sus canciones contra él.*/
         refrescarCatalogo();
 
+        // Se reconstruye la colección de canciones compradas antes de
+        // cargar las playlists del usuario.
+        gestorCancion.cargarCancionesCompradas(usuarioFinal);
+
         gestorListaReproduccion.cargarListasDesdeBD(
                 usuarioFinal, catalogoCompleto
         );
@@ -202,6 +206,10 @@ public class Controller {
         );
     }
 
+    public ArrayList<ListaReproduccion> listarTodasLasListas() throws Exception {
+        return gestorListaReproduccion.listarTodasLasListas(catalogoCompleto);
+    }
+
     public ArrayList<ListaReproduccion> buscarListasPorNombre(String nombre) {
         return gestorListaReproduccion.buscarListasPorNombre(
                 getUsuarioFinalActual(), nombre
@@ -214,6 +222,7 @@ public class Controller {
         gestorListaReproduccion.agregarCancionALista(
                 getUsuarioFinalActual(), lista, cancion
         );
+        refrescarCatalogo();
     }
 
     public void eliminarCancionDeLista(
@@ -222,6 +231,7 @@ public class Controller {
         gestorListaReproduccion.eliminarCancionDeLista(
                 getUsuarioFinalActual(), lista, cancion
         );
+        refrescarCatalogo();
     }
 
     public void reproducirCancion(Cancion cancion) throws Exception {
@@ -313,13 +323,16 @@ public class Controller {
 
     public void comprarCancion(Cancion cancion) throws Exception {
         gestorCancion.comprarCancion(getUsuarioFinalActual(), cancion);
+        refrescarCatalogo();
     }
 
     public float calificarCancion(
             Cancion cancion, float calificacion) throws Exception {
 
-        return gestorCancion.calificarCancion(
+        float promedio = gestorCancion.calificarCancion(
                 getUsuarioFinalActual(), cancion, calificacion
         );
+        refrescarCatalogo();
+        return promedio;
     }
 }

@@ -92,6 +92,7 @@ public class GestorListaReproduccion {
                             ];
 
             listaEnMemoria.setId(listaGuardada.getId());
+            listaEnMemoria.setFechaCreacion(listaGuardada.getFechaCreacion());
 
             ArrayList<Integer> idsCanciones =
                     daoListaReproduccion.buscarIdsCancionesDeLista(
@@ -108,6 +109,30 @@ public class GestorListaReproduccion {
                 }
             }
         }
+    }
+
+    // Carga todas las listas del sistema para que el administrador
+    // pueda consultarlas y reproducirlas libremente.
+    public ArrayList<ListaReproduccion> listarTodasLasListas(
+            ArrayList<Cancion> catalogoCompleto) throws Exception {
+
+        ArrayList<ListaReproduccion> listas = daoListaReproduccion.listarTodas();
+
+        for (ListaReproduccion lista : listas) {
+
+            ArrayList<Integer> idsCanciones =
+                    daoListaReproduccion.buscarIdsCancionesDeLista(lista.getId());
+
+            for (int idCancion : idsCanciones) {
+                Cancion cancion = buscarEnCatalogoPorId(catalogoCompleto, idCancion);
+
+                if (cancion != null) {
+                    lista.agregarCancionSinContar(cancion);
+                }
+            }
+        }
+
+        return listas;
     }
 
     private Cancion buscarEnCatalogoPorId(

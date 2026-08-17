@@ -113,7 +113,20 @@ public class ListaReproduccion {
             return false;
         }
 
-        boolean eliminada = canciones.remove(cancion);
+        boolean eliminada = false;
+
+        // Se compara por id porque las canciones recuperadas desde MySQL
+        // pueden ser instancias diferentes del mismo registro.
+        for (int i = 0; i < canciones.size(); i++) {
+            Cancion actual = canciones.get(i);
+
+            if (actual == cancion ||
+                    (actual.getId() > 0 && actual.getId() == cancion.getId())) {
+                canciones.remove(i);
+                eliminada = true;
+                break;
+            }
+        }
 
         if (eliminada) {
             // Actualiza la calificación promedio de la lista.

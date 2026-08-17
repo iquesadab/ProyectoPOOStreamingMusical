@@ -177,12 +177,34 @@ public class UsuarioFinal extends Usuario {
              i < cantidadCancionesCompradas;
              i++) {
 
-            if (cancionesCompradas[i] == cancion) {
+            Cancion comprada = cancionesCompradas[i];
+
+            // Cuando los objetos vienen de MySQL pueden ser instancias
+            // distintas, por eso se comparan por id y no solo por referencia.
+            if (comprada != null && cancion != null &&
+                    ((comprada.getId() > 0 && comprada.getId() == cancion.getId()) ||
+                            comprada == cancion)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    // Carga una canción que ya había sido comprada y está guardada en MySQL.
+    // No descuenta saldo ni aumenta estadísticas porque no es una compra nueva.
+    public void cargarCancionComprada(Cancion cancion) {
+
+        if (cancion == null || tieneCancionComprada(cancion)) {
+            return;
+        }
+
+        if (cantidadCancionesCompradas >= cancionesCompradas.length) {
+            return;
+        }
+
+        cancionesCompradas[cantidadCancionesCompradas] = cancion;
+        cantidadCancionesCompradas++;
     }
 
     public void comprarCancion(
